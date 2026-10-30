@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 1,
+  "status": "accepted",
+  "lanePilotRunId": "lprun_fbf057b4772045669f46d00ec2674bf7",
+  "lanePilotTaskId": "T5.3",
+  "attemptId": "lpattempt_92ba9a92a8c14e4c8c669d647e43e7c6",
+  "pmThreadId": "thr_tus6ykzucc",
+  "writerThreadId": "thr_pww5j8jbkv",
+  "ownsPaths": [
+    "server/automation.ts",
+    "server/automation-handlers.ts",
+    "ui/automation-tab.tsx",
+    "ui/automation-tab.css",
+    "i18n/automation.ts",
+    "tests/server/automation-handlers.test.ts"
+  ],
+  "readFirst": [
+    {
+      "path": ".agents/phases/ph_f16b2b8b06/CONTEXT.md",
+      "windows": []
+    },
+    {
+      "path": "server.ts",
+      "windows": []
+    },
+    {
+      "path": "server/context.ts",
+      "windows": []
+    },
+    {
+      "path": "server/automation.ts",
+      "windows": []
+    },
+    {
+      "path": "ui/automation-tab.tsx",
+      "windows": []
+    },
+    {
+      "path": "app.tsx",
+      "windows": []
+    },
+    {
+      "path": "app.css",
+      "windows": []
+    },
+    {
+      "path": "i18n/index.ts",
+      "windows": []
+    },
+    {
+      "path": "i18n/hierarchy.ts",
+      "windows": []
+    },
+    {
+      "path": "lib/log-store.ts",
+      "windows": []
+    },
+    {
+      "path": "lib/config.ts",
+      "windows": []
+    },
+    {
+      "path": "lib/automation/run.ts",
+      "windows": []
+    },
+    {
+      "path": "lib/automation/planner.ts",
+      "windows": []
+    },
+    {
+      "path": "lib/automation/executor.ts",
+      "windows": []
+    }
+  ],
+  "output": "Automation is wired through the plugin: a one-minute schedule, a capped lifecycle log, a site rules editor, dry-run preview, and a Live switch that only proceeds after confirm.\n\n**Changed paths**\n- `server/automation-handlers.ts`\n- `server/automation.ts`\n- `ui/automation-tab.tsx`\n- `ui/automation-tab.css`\n- `i18n/automation.ts`\n- `tests/server/automation-handlers.test.ts`\n\nPreview always calls `runSite` with mode `dry-run` (even when the site is Live) and appends stripped `ActionResult`s to `lifecycle-log:<siteId>` (max 200, `keywordsCount` only). `automation_run` returns `[]` for `off`. `site_save` goes through `parseConfig` and leaves the stored config alone on invalid input such as mode `auto`. The cron `* * * * *` job runs each non-off site when `automationIntervalMinutes` have passed, with a per-site in-flight guard and alert log entries on failure.\n\nThe Automation tab picks a site, edits rules, previews a city table, shows danger pills for open `alert` outcomes until a later `done` for that city, and opens an `alertdialog` before Live. `DEFAULT_CONFIG` still defaults to `dry-run` in `lib/config.ts` (untouched).\n\n**Checks**\n- `node --test tests/server/automation-handlers.test.ts` — exit 0 (4 pass)\n- `npx tsc --noEmit -p tsconfig.json` — exit 0\n- `grep -c 'Record<keyof typeof en, string>' i18n/automation.ts` — prints 1\n- `! grep -rnE '#[0-9a-fA-F]{3,8}\\b' ui/automation-tab.css` — exit 0\n\nThe plugin UI itself was not clicked in a running BB host; QA-W3-1 still needs that pass.\n\n```plan-fact\n[\n  {\"item\":1,\"status\":\"done\",\"evidence\":[\"server/automation-handlers.ts:8-8\",\"server/automation-handlers.ts:22-33\",\"server/automation-handlers.ts:42-46\",\"server/automation-handlers.ts:86-94\",\"server/automation-handlers.ts:101-120\",\"tests/server/automation-handlers.test.ts:104-147\",\"cmd:node --test tests/server/automation-handlers.test.ts\"]},\n  {\"item\":2,\"status\":\"done\",\"evidence\":[\"cmd:npx tsc --noEmit -p tsconfig.json\"]},\n  {\"item\":3,\"status\":\"done\",\"evidence\":[\"i18n/automation.ts:45-45\",\"ui/automation-tab.css\",\"cmd:grep -c 'Record<keyof typeof en, string>' i18n/automation.ts\",\"cmd:! grep -rnE '#[0-9a-fA-F]{3,8}\\\\b' ui/automation-tab.css\"]}\n]\n```\n\nAPPROACH: Keep RPC handlers free of runtime SDK/zod imports so `node --test` can run them, reuse `runSite`/`parseConfig`/`appendLog`, and put Live behind a native confirm dialog plus Pokecut `--pk-*` tokens.\n\nLESSON: For this plugin, `node --test` on handler files is the real gate; UI strings and CSS tokens have to live in the owned i18n/css files because `app.tsx` and `i18n/index.ts` are frozen.",
+  "verification": [
+    {
+      "command": "node --test tests/server/automation-handlers.test.ts",
+      "exitCode": 0,
+      "stdout": "✔ automation_preview on a live site makes 0 mutating calls and logs dry-run entries (9.548584ms)\r\n✔ automation_run on an off site returns [] and makes 0 client calls (0.534167ms)\r\n✔ site_save with mode 'auto' throws and keeps the previous site (0.276625ms)\r\n✔ 205 previews keep 200 log entries without keywords under 256 KiB (5.317125ms)\r\nℹ tests 4\r\nℹ suites 0\r\nℹ pass 4\r\nℹ fail 0\r\nℹ cancelled 0\r\nℹ skipped 0\r\nℹ todo 0\r\nℹ duration_ms 118.280042\r\n",
+      "stderr": "",
+      "sandboxBackend": "macos-seatbelt",
+      "policySha256": "04701770d125c5383666ec85bdaaab783c4a173cd92af0913c9993ba86cde53e",
+      "workspacePath": "/Users/vechkasov/.lane-pilot/worktrees/lpattempt_92ba9a92a8c14e4c8c669d647e43e7c6/magicseo"
+    },
+    {
+      "command": "npx tsc --noEmit -p tsconfig.json",
+      "exitCode": 0,
+      "stdout": "\\\u001b[1G\u001b[0K\u001b[1mnpm\u001b[22m \u001b[96mnotice\u001b[39m\r\n\u001b[1mnpm\u001b[22m \u001b[96mnotice\u001b[39m New \u001b[31mmajor\u001b[39m version of npm available! \u001b[31m11.16.0\u001b[39m -> \u001b[34m12.2.1\u001b[39m\r\n\u001b[1mnpm\u001b[22m \u001b[96mnotice\u001b[39m Changelog: \u001b[34mhttps://github.com/npm/cli/releases/tag/v12.2.1\u001b[39m\r\n\u001b[1mnpm\u001b[22m \u001b[96mnotice\u001b[39m To update run: \u001b[4mnpm install -g npm@12.2.1\u001b[24m\r\n\u001b[1mnpm\u001b[22m \u001b[96mnotice\u001b[39m\r\n\\\u001b[1G\u001b[0K",
+      "stderr": "",
+      "sandboxBackend": "macos-seatbelt",
+      "policySha256": "18a36471c83128fc8834b7a7c1f4c75d5c812b3adfb5760babe78a1a54e06c3c",
+      "workspacePath": "/Users/vechkasov/.lane-pilot/worktrees/lpattempt_92ba9a92a8c14e4c8c669d647e43e7c6/magicseo"
+    },
+    {
+      "command": "grep -c 'Record<keyof typeof en, string>' i18n/automation.ts",
+      "exitCode": 0,
+      "stdout": "1\r\n",
+      "stderr": "",
+      "sandboxBackend": "macos-seatbelt",
+      "policySha256": "f440ee6a9341b62bde8299443a0f400e43003b62443e3505ad71ca89ecdec9c6",
+      "workspacePath": "/Users/vechkasov/.lane-pilot/worktrees/lpattempt_92ba9a92a8c14e4c8c669d647e43e7c6/magicseo"
+    },
+    {
+      "command": "! grep -rnE '#[0-9a-fA-F]{3,8}\\b' ui/automation-tab.css",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "sandboxBackend": "macos-seatbelt",
+      "policySha256": "fd8d54a9e57387b550f2e5b642b830fb66d7bf2c1cd84b5f61991f29b36c88a6",
+      "workspacePath": "/Users/vechkasov/.lane-pilot/worktrees/lpattempt_92ba9a92a8c14e4c8c669d647e43e7c6/magicseo"
+    }
+  ],
+  "runV2": {
+    "schemaVersion": 1,
+    "pools": {
+      "provider": 15,
+      "verification": 2
+    },
+    "score": 8,
+    "risk": "high",
+    "sourceRisk": "high",
+    "scoreAdapter": "task-risk-v1"
+  },
+  "reasoning": [
+    {
+      "planSha256": "bea603ef56a66c6d102a25899b14e422486c851cf99cc9bf7619092aa2e628f4",
+      "sentPlanSha256": null,
+      "sourceLength": 2313,
+      "sentLength": null,
+      "jevStatus": "disabled",
+      "jevDecision": null,
+      "requestedReasoningLevel": "medium",
+      "effectiveReasoningLevel": "medium",
+      "fallbackReason": "jev_disabled;jev_disabled_by_project_setting",
+      "retryEffort": {
+        "enabled": false,
+        "retryIndex": 0,
+        "before": "medium",
+        "after": "medium",
+        "changed": false
+      },
+      "providerId": "acp-cursor",
+      "model": "grok-4.6",
+      "serviceTier": "default",
+      "requestedServiceTier": "default",
+      "runId": "lprun_fbf057b4772045669f46d00ec2674bf7",
+      "attemptId": "lpattempt_92ba9a92a8c14e4c8c669d647e43e7c6",
+      "threadId": "thr_pww5j8jbkv",
+      "effortMode": "manual",
+      "selectionSource": {
+        "providerId": "acp-cursor",
+        "model": "grok-4.6",
+        "reasoningLevel": "medium",
+        "serviceTier": "default",
+        "reasoningLevelSource": "explicit"
+      },
+      "dispatchContext": {
+        "memoryText": "",
+        "memoryPicked": [],
+        "rulesText": "- In verification scripts and tests that create temp dirs, use /tmp explicitly (mktemp -d /tmp/x.XXXXXX, or TMPDIR=/tmp): the writer sandbox denies mkdtemp in the system TMPDIR under /var/folders. Keep PM-written check scripts in /tmp/<name>/ (the guard blocks .mjs under .agents/).",
+        "rulesPicked": {
+          "total": 5,
+          "picked": [
+            "rule_501a857c9b1bd60a"
+          ]
+        },
+        "executionPacket": "Read these before editing; they are the context for this task:\n- .agents/phases/ph_f16b2b8b06/CONTEXT.md L1-L84 (sha256 6cd52da5)\n- server.ts L1-L200 (sha256 0c0109f8)\n- server/context.ts L1-L12 (sha256 6720f98d)\n- server/automation.ts L1-L11 (sha256 c0e5d184)\n- ui/automation-tab.tsx L1-L8 (sha256 17bdf8df)\n- app.tsx L1-L325 (sha256 1cc74b8c)",
+        "executionPacketSha256": "e19dc15eb92b57ad547675d2231f8042fa6ac69f2154603efe81f68426c22979",
+        "pmReadContext": "{\"summary\":\"Task T5.3 ('Automation in the plugin: schedule, lifecycle log, site rules editor, dry-run preview and Live switch') implements the automation, scheduling, logging, and user interface components for the MagicSEO BB plugin. The automation system links external concert feeds (specifically WordPress concert posts from atmosphere-show.ru) to MagicSEO SEO promotion projects. In MagicSEO, a project corresponds to a single domain and integer Yandex region ID. The automation lifecycle requires starting or creating a city project when a published concert with a link is scheduled more than 48 hours in advance (calculated in the concert venue's local timezone). Promotion must stop when less than 48 hours remain before the concert start. If another published concert in the same city is scheduled further in the future, promotion will restart once the earlier concert passes.\\n\\nThe task relies on existing domain logic modules under lib/:\\n1. lib/config.ts defines Config and SiteConfig schemas, validating site domains, WordPress endpoints, templates, aliases, region/timezone overrides, and operation modes ('off' | 'dry-run' | 'live'). The parameter stopHoursBefore is strictly fixed at 48 hours. parseConfig rejects unknown keys and sensitive credential tokens.\\n2. lib/automation/run.ts coordinates the execution of runSite, querying concerts, retrieving MagicSEO catalog items, checking autolaunch active states, generating action plans via planSite, and executing them via executeActions.\\n3. lib/automation/planner.ts generates Action objects ('create', 'start', 'stop', 'skip') based on concert proximity and current project status.\\n4. lib/automation/executor.ts executes planned actions into ActionResult objects ('planned', 'done', 'blocked', 'alert'). In dry-run mode, no mutations occur; in live mode, projects are created, keywords are uploaded, and promotions are toggled.\\n\\nTask T5.3 owns six deliverables:\\n- server/automation-handlers.ts: Exports createAutomationHandlers({ getConfig, saveConfig, kv, client, fetchConcerts, now }) returning automation_preview, automation_run, lifecycle_log, and site_save. It must only use 'import type' for @get-bb/plugin-sdk and zod to allow node --test execution without npm install. automation_preview always runs in 'dry-run' mode, while automation_run respects site.mode (returning [] when 'off'). Both append ActionResults to KV key 'lifecycle-log:<siteId>', keeping at most 200 items, stripping the keywords array to keywordsCount, and staying below 256 KiB. site_save validates configurations through parseConfig.\\n- server/automation.ts: Exports automationRpc Zod contracts, wraps handlers via automationHandlers(ctx), and registers a 1-minute background schedule bb.background.schedule('automation', '* * * * *', ...) that checks automationIntervalMinutes, enforces an in-flight guard, and catches errors per site.\\n- ui/automation-tab.tsx & ui/automation-tab.css: Renders the Automation tab UI displaying city preview tables, rule settings, dry-run triggers, an explicit confirmation dialog before switching to Live mode, and a danger status pill for any 'alert' outcome until resolved by a 'done' outcome. Styling must strictly use Pokecut --pk-* design tokens with BB fallbacks and zero hex color literals.\\n- i18n/automation.ts: Provides English and Russian translations enforced by export const ru: Record<keyof typeof en, string>.\\n- tests/server/automation-handlers.test.ts: Tests dry-run isolation, 'off' mode bypassing, site validation rejection, and 200-entry log truncation under 256 KiB.\\n\\nAll existing files in lib/**, core server setup (server.ts, server/context.ts), and main UI containers (app.tsx, app.css) are designated as never_touch.\",\"keyFacts\":[\"server/automation-handlers.ts must export createAutomationHandlers(deps) returning automation_preview, automation_run, lifecycle_log, and site_save, using 'import type' only for @get-bb/plugin-sdk and zod so node --test runs without npm install (TASK CONTRACT).\",\"automation_preview always executes runSite with mode 'dry-run', while automation_run respects site.mode and returns an empty array for mode 'off' (TASK CONTRACT).\",\"Both automation_preview and automation_run append ActionResults to KV key 'lifecycle-log:<siteId>', capped at 200 entries, with the keywords array stripped to keywordsCount only (TASK CONTRACT).\",\"site_save validates input using parseConfig and rejects invalid site configurations (such as mode 'auto') with an error while preserving previous stored configuration (TASK CONTRACT).\",\"server/automation.ts registers a 1-minute cron schedule via bb.background.schedule('automation', '* * * * *', ...) that executes automation_run only when automationIntervalMinutes have passed, using an in-flight guard and per-site try/catch (TASK CONTRACT).\",\"The Live mode switch in the UI requires an explicit owner confirmation dialog, and DEFAULT_CONFIG defaults site mode to 'dry-run' (TASK CONTRACT, lib/config.ts).\",\"An ActionResult with outcome 'alert' displays as a danger status pill at the top of the Automation tab until a subsequent run for that city ends with outcome 'done' (TASK CONTRACT).\",\"All user-visible strings must be defined in i18n/automation.ts with the exact typing 'export const ru: Record<keyof typeof en, string>' (TASK CONTRACT).\",\"ui/automation-tab.css must only use '--pk-*' design tokens with BB fallbacks and must contain zero hex color codes (TASK CONTRACT).\",\"Plugin KV storage has a hard limit of 256 KiB (262144 bytes) per key, requiring all serialized log payloads to stay below this boundary (TASK CONTRACT).\",\"Testing requires node --test tests/server/automation-handlers.test.ts to verify dry-run isolation, 'off' mode non-execution, validation rejection, and 200-entry log truncation under 256 KiB (TASK CONTRACT).\",\"A MagicSEO project is bound to a single domain and a single regional Yandex geo integer ID, with no internal tasks, schedules, or dates (CONTEXT.md).\",\"Automation starts a city project when a published concert with a link is scheduled more than 48 hours away, creating the project if none exists for that city (CONTEXT.md).\",\"Automation stops a city project when 48 hours remain before the start of the nearest concert in that city, computed using the city's local timezone (CONTEXT.md).\",\"City project keywords are generated from site keywordTemplates containing placeholders '%город%' and '%в_городе%' and uploaded via CSV multipart to POST /backend/project/{id}/keywords (CONTEXT.md).\",\"SiteConfig in lib/config.ts enforces mode to be 'off', 'dry-run', or 'live', and strictly locks stopHoursBefore to 48 hours, rejecting any other value (lib/config.ts).\",\"parseConfig in lib/config.ts strips or rejects unknown keys and secret-like field names matching SECRET_KEY, ensuring credentials are never saved in config (lib/config.ts).\",\"DEFAULT_CONFIG defines default site 'atmosphere-show' for atmosphere-show.ru, 1-minute automation interval, and 6-hour position check interval (lib/config.ts).\",\"runSite in lib/automation/run.ts coordinates fetching WordPress concerts, retrieving MagicSEO catalog items, checking autolaunch active states, generating plans, and executing actions (lib/automation/run.ts).\",\"planSite in lib/automation/planner.ts groups concerts by resolved city/region/timezone, sorts upcoming concerts by start time, and generates create, start, stop, or skip actions (lib/automation/planner.ts).\",\"Cities that cannot be resolved in planSite produce a 'skip' action with reason 'unmapped_city' (lib/automation/planner.ts).\",\"In dry-run mode, executeActions in lib/automation/executor.ts generates planned ActionResults without making mutating MagicSEO API calls (lib/automation/executor.ts).\",\"In live mode, executeActions creates missing projects using site.newProject settings, uploads keywords CSV, and activates promotion via startPromotion (lib/automation/executor.ts).\",\"ActionResult records action metadata along with execution mode ('dry-run' | 'live'), outcome ('planned' | 'done' | 'blocked' | 'alert'), detail message, ISO timestamp, and optional keywordsCount (lib/automation/executor.ts).\"],\"openQuestions\":[\"What specific helper functions and interfaces are provided by lib/log-store.ts (listed in read_first but omitted from excerpts) for managing the 200-entry lifecycle log and KV persistence?\",\"What is the exact signature and API of the server KV store interface passed to createAutomationHandlers (e.g. kv.get, kv.set)?\",\"What is the structure of server/context.ts and how do getConfig and saveConfig manage persistence and concurrent config updates?\",\"How is ui/automation-tab.tsx mounted or rendered within app.tsx given that app.tsx is marked never_touch and was not excerpted?\",\"What exact in-flight guard pattern is implemented in bb-plugin-repo-pulse/server.ts line ~1104 for the background scheduler?\",\"What is the implementation in lib/automation/executor.ts beyond line 137 regarding error handling and alerts for live 'start' and 'stop' actions?\",\"How does site_save receive its payload (a single SiteConfig or a partial update) and how does it merge or preserve the remainder of config.sites?\",\"How is the active siteId selected or tracked in ui/automation-tab.tsx when multiple sites exist in configuration?\",\"How should the UI or handlers clear an 'alert' state if a city has multiple concerts or if a subsequent run only resolves some cities?\"]}",
+        "agent": "Lane Pilot writer",
+        "promptChars": 16198,
+        "helperMode": "roles",
+        "helperRequired": false,
+        "skillPick": {
+          "enabled": true,
+          "skills": [
+            "bb-plugin-authoring",
+            "ui-review",
+            "ui-ux-pro-max"
+          ],
+          "picked": [
+            {
+              "name": "bb-plugin-authoring",
+              "p": 0.87
+            }
+          ],
+          "craft": [
+            {
+              "name": "ui-review",
+              "p": 0.75
+            },
+            {
+              "name": "ui-ux-pro-max",
+              "p": 0.69
+            }
+          ],
+          "projectFolder": [],
+          "hints": [],
+          "sources": {
+            "bb-plugin-authoring": "/home/ubuntu/.local/share/bb-server-runtime-0.48.1-vk.1/node_modules/bb-app/server/dist/builtin-plugins/bb-guide/skills/bb-plugin-authoring",
+            "ui-review": "/Users/vechkasov/.bb/skills/ui-review",
+            "ui-ux-pro-max": "/Users/vechkasov/.agents/skills/ui-ux-pro-max"
+          },
+          "reason": null,
+          "materialized": []
+        },
+        "writerKey": "acp-cursor/grok-4.6",
+        "harness": {
+          "id": "hrn_45a2ac4d220ce311",
+          "arm": null,
+          "alwaysOnChars": 0,
+          "skills": [],
+          "checks": [],
+          "materialize": null
+        }
+      }
+    }
+  ],
+  "emergencyFallback": null,
+  "turns": 1
+}
