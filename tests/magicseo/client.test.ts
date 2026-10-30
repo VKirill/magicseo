@@ -298,7 +298,7 @@ test('mutations call onMutation once; reads never do; login is absent', async ()
   for (const row of READS) await row.call(client);
   assert.equal(mutations.length, 0);
   for (const row of MUTATIONS) {
-    const before = mutations.length;
+    const before: number = mutations.length;
     await row.call(client);
     assert.equal(mutations.length, before + 1, row.name);
     const e = mutations.at(-1)!;
