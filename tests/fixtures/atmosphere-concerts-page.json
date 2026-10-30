@@ -1,0 +1,126 @@
+[
+ {
+  "id": 2403,
+  "date": "2026-10-29T16:37:07",
+  "date_gmt": "2026-10-29T13:37:07",
+  "status": "publish",
+  "link": "https://atmosphere-show.ru/concerts/votkinsk-31-01/",
+  "slug": "votkinsk-31-01",
+  "type": "concerts",
+  "title": {
+   "rendered": "Воткинск — 31 января 2027 — 19:00"
+  },
+  "modified_gmt": "2026-10-29T13:37:09",
+  "meta": {
+   "atm_stock_state": "normal",
+   "atm_remaining": 624,
+   "atm_stock_checked": 1793373304,
+   "gorod": "Воткинск",
+   "v_gorode": "в Воткинске",
+   "data_kontserta": "2027-01-31",
+   "data_kontserta_seo": "31 января",
+   "vremia_kontserta": "19:00",
+   "ssylka_na_bilety": "https://qtickets.ru/show/1007978",
+   "mesto_provedeniia": "ДК «Юбилейный»",
+   "adres_provedeniia": "ул. Мира, 19",
+   "sold_out": "",
+   "sleduyushchiy_kontsert": "",
+   "data_perenosa": "",
+   "novaya_data_kontserta": "",
+   "perenos_kontserta": ""
+  }
+ },
+ {
+  "id": 2085,
+  "date": "2026-10-14T14:25:01",
+  "date_gmt": "2026-10-14T11:25:01",
+  "status": "publish",
+  "link": "https://atmosphere-show.ru/concerts/mytishchi-26-12-2/",
+  "slug": "mytishchi-26-12-2",
+  "type": "concerts",
+  "title": {
+   "rendered": "Мытищи — 26 декабря 2026 — 19:00"
+  },
+  "modified_gmt": "2026-10-23T11:44:35",
+  "meta": {
+   "atm_stock_state": "normal",
+   "atm_remaining": 342,
+   "atm_stock_checked": 1793373314,
+   "gorod": "Мытищи",
+   "v_gorode": "в Мытищах",
+   "data_kontserta": "2026-12-26",
+   "data_kontserta_seo": "26 декабря",
+   "vremia_kontserta": "19:00",
+   "ssylka_na_bilety": "https://qtickets.ru/show/998046",
+   "mesto_provedeniia": "МАУ ЦК \"Подмосковье\"",
+   "adres_provedeniia": "мкр-н Пироговский, ул. Пионерская, 2",
+   "sold_out": "false",
+   "sleduyushchiy_kontsert": "",
+   "data_perenosa": "",
+   "novaya_data_kontserta": "",
+   "perenos_kontserta": ""
+  }
+ },
+ {
+  "id": 1440,
+  "date": "2026-09-29T14:42:35",
+  "date_gmt": "2026-09-29T11:42:35",
+  "status": "publish",
+  "link": "https://atmosphere-show.ru/concerts/smolensk-13-02/",
+  "slug": "smolensk-13-02",
+  "type": "concerts",
+  "title": {
+   "rendered": "Смоленск — 13 февраля 2027 — 19:00"
+  },
+  "modified_gmt": "2026-09-29T12:04:23",
+  "meta": {
+   "atm_stock_state": "normal",
+   "atm_remaining": 394,
+   "atm_stock_checked": 1793373324,
+   "gorod": "Смоленск",
+   "v_gorode": "в Смоленске",
+   "data_kontserta": "2027-02-13",
+   "data_kontserta_seo": "13 февраля",
+   "vremia_kontserta": "19:00",
+   "ssylka_na_bilety": "https://qtickets.ru/show/983819",
+   "mesto_provedeniia": "ДК железнодорожников",
+   "adres_provedeniia": "Витебское ш., 10",
+   "sold_out": "",
+   "sleduyushchiy_kontsert": "",
+   "data_perenosa": "",
+   "novaya_data_kontserta": "",
+   "perenos_kontserta": ""
+  }
+ },
+ {
+  "id": 1439,
+  "date": "2026-09-29T14:42:29",
+  "date_gmt": "2026-09-29T11:42:29",
+  "status": "publish",
+  "link": "https://atmosphere-show.ru/concerts/smolensk-04-01-2/",
+  "slug": "smolensk-04-01-2",
+  "type": "concerts",
+  "title": {
+   "rendered": "Смоленск — 04 января 2027 — 19:00"
+  },
+  "modified_gmt": "2026-09-29T12:04:21",
+  "meta": {
+   "atm_stock_state": "normal",
+   "atm_remaining": 394,
+   "atm_stock_checked": 1793373324,
+   "gorod": "Смоленск",
+   "v_gorode": "в Смоленске",
+   "data_kontserta": "2027-01-04",
+   "data_kontserta_seo": "4 января",
+   "vremia_kontserta": "19:00",
+   "ssylka_na_bilety": "https://qtickets.ru/show/983818",
+   "mesto_provedeniia": "ДК железнодорожников",
+   "adres_provedeniia": "Витебское ш., 10",
+   "sold_out": "",
+   "sleduyushchiy_kontsert": "",
+   "data_perenosa": "",
+   "novaya_data_kontserta": "",
+   "perenos_kontserta": ""
+  }
+ }
+]

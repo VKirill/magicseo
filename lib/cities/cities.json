@@ -1,0 +1,764 @@
+{
+ "cities": [
+  {
+   "name": "Абакан",
+   "region": 1095,
+   "timeZone": "Asia/Krasnoyarsk"
+  },
+  {
+   "name": "Альметьевск",
+   "region": 11121,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Ангарск",
+   "region": 11256,
+   "timeZone": "Asia/Irkutsk"
+  },
+  {
+   "name": "Арзамас",
+   "region": 11080,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Архангельск",
+   "region": 20,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Астрахань",
+   "region": 37,
+   "timeZone": "Europe/Astrakhan"
+  },
+  {
+   "name": "Ачинск",
+   "region": 11302,
+   "timeZone": "Asia/Krasnoyarsk"
+  },
+  {
+   "name": "Балаково",
+   "region": 11143,
+   "timeZone": "Europe/Saratov"
+  },
+  {
+   "name": "Барнаул",
+   "region": 197,
+   "timeZone": "Asia/Barnaul"
+  },
+  {
+   "name": "Белгород",
+   "region": 4,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Бийск",
+   "region": 975,
+   "timeZone": "Asia/Barnaul"
+  },
+  {
+   "name": "Благовещенск",
+   "region": null,
+   "timeZone": "Asia/Yakutsk"
+  },
+  {
+   "name": "Братск",
+   "region": 976,
+   "timeZone": "Asia/Irkutsk"
+  },
+  {
+   "name": "Брест",
+   "region": 153,
+   "timeZone": "Europe/Minsk"
+  },
+  {
+   "name": "Брянск",
+   "region": 191,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Великий Новгород",
+   "region": 24,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Витебск",
+   "region": 154,
+   "timeZone": "Europe/Minsk"
+  },
+  {
+   "name": "Владивосток",
+   "region": 75,
+   "timeZone": "Asia/Vladivostok"
+  },
+  {
+   "name": "Владикавказ",
+   "region": 33,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Владимир",
+   "region": 192,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Волгоград",
+   "region": 38,
+   "timeZone": "Europe/Volgograd"
+  },
+  {
+   "name": "Волгодонск",
+   "region": 11036,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Волжск",
+   "region": 20721,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Волжский",
+   "region": 10951,
+   "timeZone": "Europe/Volgograd"
+  },
+  {
+   "name": "Вологда",
+   "region": 21,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Воронеж",
+   "region": 193,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Воскресенск",
+   "region": 10722,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Воткинск",
+   "region": 11149,
+   "timeZone": "Europe/Samara"
+  },
+  {
+   "name": "Геленджик",
+   "region": 10990,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Георгиевск",
+   "region": 11056,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Гродно",
+   "region": 10274,
+   "timeZone": "Europe/Minsk"
+  },
+  {
+   "name": "Грозный",
+   "region": 1106,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Губкин",
+   "region": 10646,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Дзержинск",
+   "region": null,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Димитровград",
+   "region": 11155,
+   "timeZone": "Europe/Ulyanovsk"
+  },
+  {
+   "name": "Долгопрудный",
+   "region": 214,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Дудинка",
+   "region": 11344,
+   "timeZone": "Asia/Krasnoyarsk"
+  },
+  {
+   "name": "Ейск",
+   "region": 10993,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Екатеринбург",
+   "region": 54,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Железногорск",
+   "region": null,
+   "timeZone": "Asia/Krasnoyarsk"
+  },
+  {
+   "name": "Зеленогорск",
+   "region": null,
+   "timeZone": "Asia/Krasnoyarsk"
+  },
+  {
+   "name": "Зеленоград",
+   "region": 216,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Златоуст",
+   "region": 11202,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Ижевск",
+   "region": 44,
+   "timeZone": "Europe/Samara"
+  },
+  {
+   "name": "Иркутск",
+   "region": 63,
+   "timeZone": "Asia/Irkutsk"
+  },
+  {
+   "name": "Йошкар-Ола",
+   "region": 41,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Калининград",
+   "region": 22,
+   "timeZone": "Europe/Kaliningrad"
+  },
+  {
+   "name": "Калуга",
+   "region": 6,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Каменск-Уральский",
+   "region": 11164,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Каменск-Шахтинский",
+   "region": 11043,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Канск",
+   "region": 11307,
+   "timeZone": "Asia/Krasnoyarsk"
+  },
+  {
+   "name": "Кемерово",
+   "region": 64,
+   "timeZone": "Asia/Novokuznetsk"
+  },
+  {
+   "name": "Киров",
+   "region": null,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Клин",
+   "region": 10733,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Комсомольск-на-Амуре",
+   "region": 11453,
+   "timeZone": "Asia/Vladivostok"
+  },
+  {
+   "name": "Королев",
+   "region": 20728,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Кострома",
+   "region": 7,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Краснодар",
+   "region": 35,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Красноярск",
+   "region": 62,
+   "timeZone": "Asia/Krasnoyarsk"
+  },
+  {
+   "name": "Кропоткин",
+   "region": 10996,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Кудрово",
+   "region": null,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Кунгур",
+   "region": 20250,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Курган",
+   "region": 53,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Курск",
+   "region": 8,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Липецк",
+   "region": 9,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Магнитогорск",
+   "region": 235,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Майкоп",
+   "region": 1093,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Махачкала",
+   "region": 28,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Минск",
+   "region": 157,
+   "timeZone": "Europe/Minsk"
+  },
+  {
+   "name": "Мичуринск",
+   "region": 10803,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Могилев",
+   "region": 158,
+   "timeZone": "Europe/Minsk"
+  },
+  {
+   "name": "Москва",
+   "region": 213,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Московская область",
+   "region": null,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Мытищи",
+   "region": 10740,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Набережные Челны",
+   "region": 236,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Находка",
+   "region": 974,
+   "timeZone": "Asia/Vladivostok"
+  },
+  {
+   "name": "Невинномысск",
+   "region": 11064,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Нижнекамск",
+   "region": 11127,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Нижний Новгород",
+   "region": 47,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Нижний Тагил",
+   "region": 11168,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Новокузнецк",
+   "region": 237,
+   "timeZone": "Asia/Novokuznetsk"
+  },
+  {
+   "name": "Новороссийск",
+   "region": 970,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Новосибирск",
+   "region": 65,
+   "timeZone": "Asia/Novosibirsk"
+  },
+  {
+   "name": "Новосибирск (Академгородок)",
+   "region": null,
+   "timeZone": "Asia/Novosibirsk"
+  },
+  {
+   "name": "Новоуральск",
+   "region": 11170,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Новочеркасск",
+   "region": 238,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Новый город",
+   "region": null,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Норильск",
+   "region": 11311,
+   "timeZone": "Asia/Krasnoyarsk"
+  },
+  {
+   "name": "Обнинск",
+   "region": 967,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Одинцово",
+   "region": 10743,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Омск",
+   "region": 66,
+   "timeZone": "Asia/Omsk"
+  },
+  {
+   "name": "Орел",
+   "region": 10,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Оренбург",
+   "region": 48,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Орск",
+   "region": 11091,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Пенза",
+   "region": 49,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Первоуральск",
+   "region": 11171,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Пермь",
+   "region": 50,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Петрозаводск",
+   "region": 18,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Подольск",
+   "region": 10747,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Псков",
+   "region": 25,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Пушкин",
+   "region": 10884,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Пятигорск",
+   "region": 11067,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Ростов-на-Дону",
+   "region": 39,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Рубцовск",
+   "region": 11251,
+   "timeZone": "Asia/Barnaul"
+  },
+  {
+   "name": "Рыбинск",
+   "region": 10839,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Рязань",
+   "region": 11,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Салават",
+   "region": 11115,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Самара",
+   "region": 51,
+   "timeZone": "Europe/Samara"
+  },
+  {
+   "name": "Санкт-Петербург",
+   "region": 2,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Саранск",
+   "region": 42,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Саратов",
+   "region": 194,
+   "timeZone": "Europe/Saratov"
+  },
+  {
+   "name": "Саянск",
+   "region": 11269,
+   "timeZone": "Asia/Irkutsk"
+  },
+  {
+   "name": "Севастополь",
+   "region": 959,
+   "timeZone": "Europe/Simferopol"
+  },
+  {
+   "name": "Северодвинск",
+   "region": 10849,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Сергиев Посад",
+   "region": 10752,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Серов",
+   "region": 11172,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Симферополь",
+   "region": 146,
+   "timeZone": "Europe/Simferopol"
+  },
+  {
+   "name": "Смоленск",
+   "region": 12,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Соликамск",
+   "region": 11110,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Солнечногорск",
+   "region": 10755,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Сочи",
+   "region": 239,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Ставрополь",
+   "region": 36,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Старый Оскол",
+   "region": 10649,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Стерлитамак",
+   "region": 11116,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Сургут",
+   "region": 973,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Сызрань",
+   "region": 11139,
+   "timeZone": "Europe/Samara"
+  },
+  {
+   "name": "Таганрог",
+   "region": 971,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Тамбов",
+   "region": 13,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Тверь",
+   "region": 14,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Тольятти",
+   "region": 240,
+   "timeZone": "Europe/Samara"
+  },
+  {
+   "name": "Томск",
+   "region": 67,
+   "timeZone": "Asia/Tomsk"
+  },
+  {
+   "name": "Тула",
+   "region": 15,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Тюмень",
+   "region": 55,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Улан-Удэ",
+   "region": 198,
+   "timeZone": "Asia/Irkutsk"
+  },
+  {
+   "name": "Ульяновск",
+   "region": 195,
+   "timeZone": "Europe/Ulyanovsk"
+  },
+  {
+   "name": "Уссурийск",
+   "region": 11426,
+   "timeZone": "Asia/Vladivostok"
+  },
+  {
+   "name": "Усть-Илимск",
+   "region": 11273,
+   "timeZone": "Asia/Irkutsk"
+  },
+  {
+   "name": "Уфа",
+   "region": 172,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Фрязино",
+   "region": 21619,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Хабаровск",
+   "region": 76,
+   "timeZone": "Asia/Vladivostok"
+  },
+  {
+   "name": "Чебоксары",
+   "region": 45,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Челябинск",
+   "region": 56,
+   "timeZone": "Asia/Yekaterinburg"
+  },
+  {
+   "name": "Череповец",
+   "region": 968,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Черногорск",
+   "region": 11342,
+   "timeZone": "Asia/Krasnoyarsk"
+  },
+  {
+   "name": "Чита",
+   "region": 68,
+   "timeZone": "Asia/Chita"
+  },
+  {
+   "name": "Щелково",
+   "region": 10765,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Электросталь",
+   "region": 20523,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Элиста",
+   "region": 1094,
+   "timeZone": "Europe/Moscow"
+  },
+  {
+   "name": "Энгельс",
+   "region": 11147,
+   "timeZone": "Europe/Saratov"
+  },
+  {
+   "name": "Южно-Сахалинск",
+   "region": 80,
+   "timeZone": "Asia/Sakhalin"
+  },
+  {
+   "name": "Якутск",
+   "region": 74,
+   "timeZone": "Asia/Yakutsk"
+  },
+  {
+   "name": "Ярославль",
+   "region": 16,
+   "timeZone": "Europe/Moscow"
+  }
+ ]
+}

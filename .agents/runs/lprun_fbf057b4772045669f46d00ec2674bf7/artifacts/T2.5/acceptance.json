@@ -1,0 +1,15 @@
+{
+  "schema_version": 2,
+  "task_id": "T2.5",
+  "task_sha256": "a52a375b7e11a8c5ca3107d3fa6f67f25c5110223b68c78e00c964aa0d600fca",
+  "attempt": 1,
+  "provider_exit": 0,
+  "report": "complete",
+  "report_sha256": "1c2e8caf2ac9c5bff6ddbc4b9bd05bf74a4475e4dfb475b02c032989c6c6c108",
+  "owns_check": "passed",
+  "verification": "passed",
+  "review": "passed",
+  "accepted": true,
+  "accepted_at": "2026-10-30T15:38:50.825Z",
+  "model": "swe-2-high"
+}
