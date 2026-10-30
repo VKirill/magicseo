@@ -1,0 +1,83 @@
+{
+  "result": [
+    {
+      "id": 67000001,
+      "text": "оркестр при свечах",
+      "checks": [
+        {
+          "time": "2026-06-17T00:00:00+03:00",
+          "provider": "topvisor",
+          "position": 101,
+          "pc_position": 101,
+          "mobile_position": 4,
+          "delta": 0,
+          "found_url": "https://proart-show.ru/orkestr",
+          "errors_count": 0,
+          "position_id": 900001
+        },
+        {
+          "time": "2026-06-18T00:00:00+03:00",
+          "provider": "topvisor",
+          "position": 5,
+          "pc_position": 5,
+          "mobile_position": 6,
+          "delta": -96,
+          "found_url": "https://proart-show.ru/orkestr",
+          "errors_count": 0,
+          "position_id": 900002
+        },
+        {
+          "time": "2026-07-12T00:00:00+03:00",
+          "provider": "topvisor",
+          "position": 3,
+          "pc_position": 3,
+          "mobile_position": 2,
+          "delta": -2,
+          "found_url": "https://proart-show.ru/orkestr",
+          "errors_count": 0,
+          "position_id": 900003
+        },
+        {
+          "time": "2026-07-13T00:00:00+03:00",
+          "provider": "topvisor",
+          "position": 3,
+          "pc_position": 3,
+          "mobile_position": 101,
+          "delta": 0,
+          "found_url": "https://proart-show.ru/orkestr",
+          "errors_count": 0,
+          "position_id": 900004
+        }
+      ]
+    },
+    {
+      "id": 67000002,
+      "text": "3000 свечей",
+      "checks": [
+        {
+          "time": "2026-06-17T00:00:00+03:00",
+          "provider": "topvisor",
+          "position": 12,
+          "pc_position": 12,
+          "mobile_position": 15,
+          "delta": 0,
+          "found_url": "https://proart-show.ru/svechi",
+          "errors_count": 0,
+          "position_id": 900005
+        },
+        {
+          "time": "2026-07-13T00:00:00+03:00",
+          "provider": "topvisor",
+          "position": 9,
+          "pc_position": 9,
+          "mobile_position": 11,
+          "delta": -3,
+          "found_url": "https://proart-show.ru/svechi",
+          "errors_count": 0,
+          "position_id": 900006
+        }
+      ]
+    }
+  ],
+  "total": 2
+}
