@@ -1,0 +1,125 @@
+.ms-auto {
+  display: grid;
+  gap: 16px;
+}
+
+.ms-auto-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.ms-auto-field {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.ms-auto-field-grow {
+  flex: 1 1 12rem;
+}
+
+.ms-auto-label {
+  font-size: 12px;
+  color: var(--pk-muted, var(--muted-foreground));
+}
+
+.ms-auto-input,
+.ms-auto-select,
+.ms-auto-textarea {
+  width: 100%;
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid var(--pk-outline, var(--input));
+  border-radius: 8px;
+  background-color: var(--pk-card, var(--card));
+  color: var(--pk-fg, var(--foreground));
+  box-shadow: var(--pk-drop, 0 1px 2px rgb(0 0 0 / 0.06));
+}
+
+.ms-auto-textarea {
+  min-height: 4.5rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+}
+
+.ms-auto-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.ms-auto-list {
+  display: grid;
+  gap: 8px;
+}
+
+.ms-auto-rules {
+  display: grid;
+  gap: 12px;
+}
+
+.ms-auto-log {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+}
+
+.ms-auto-log-item {
+  display: grid;
+  gap: 2px;
+  padding: 8px 0;
+  border-top: 1px solid var(--pk-hairline, var(--border));
+}
+
+.ms-auto-log-item:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.ms-auto-muted {
+  color: var(--pk-muted, var(--muted-foreground));
+}
+
+.ms-auto-alerts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ms-auto-dialog::backdrop {
+  background-color: color-mix(in oklab, var(--pk-fg, var(--foreground)) 45%, transparent);
+}
+
+.ms-auto-dialog {
+  width: min(28rem, calc(100% - 2rem));
+  padding: 20px;
+  border: 1px solid var(--pk-hairline, var(--border));
+  border-radius: 20px;
+  background-color: var(--pk-card, var(--card));
+  color: var(--pk-fg, var(--foreground));
+  box-shadow: var(--pk-drop, 0 1px 2px rgb(0 0 0 / 0.06));
+}
+
+.ms-auto-dialog h2 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.ms-auto-dialog p {
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: var(--pk-muted, var(--muted-foreground));
+}
+
+.ms-auto-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
