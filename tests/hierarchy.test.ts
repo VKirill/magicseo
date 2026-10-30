@@ -51,6 +51,13 @@ test('buildHierarchy groups by site, configured site first, projects sorted by c
   assert.equal(first.lastJobStatus, 2);
 });
 
+test('buildHierarchy adds a configured site with no rows first', () => {
+  const sites = buildHierarchy([], ['atmosphere-show.ru']);
+  assert.equal(sites[0].domain, 'atmosphere-show.ru');
+  assert.equal(sites[0].configured, true);
+  assert.deepEqual(sites[0].projects, []);
+});
+
 test('rowsFromCatalog reads catalog_items and counts money in rubles', () => {
   const sample = JSON.parse(readFileSync(new URL('./fixtures/catalog-items.json', import.meta.url), 'utf8'));
   const rows = rowsFromCatalog(sample, { 544055: true });

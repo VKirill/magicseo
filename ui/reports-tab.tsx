@@ -46,6 +46,22 @@ function localDate(daysFromToday: number): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
+function reportFilter(
+  domain: string,
+  from: string,
+  to: string,
+  region: number | undefined,
+  keywordQuery: string,
+): { domain: string; from: string; to: string; region?: number; keyword?: string } {
+  return {
+    domain,
+    from,
+    to,
+    ...(region !== undefined ? { region } : {}),
+    ...(keywordQuery !== '' ? { keyword: keywordQuery } : {}),
+  };
+}
+
 export function ReportsTab() {
   const rpc = useRpc<typeof rpcContract>();
   const t = useReportStrings();
@@ -83,7 +99,7 @@ export function ReportsTab() {
     let alive = true;
     setError('');
     rpc
-      .call('positions_report', { domain, region, keyword: keywordQuery || undefined, from, to })
+      .call('positions_report', reportFilter(domain, from, to, region, keywordQuery))
       .then((data) => {
         if (alive) setRows(data);
       })
@@ -145,7 +161,7 @@ export function ReportsTab() {
 
   async function exportCsv() {
     try {
-      const csv = await rpc.call('positions_csv', { domain, region, keyword: keywordQuery || undefined, from, to });
+      const csv = await rpc.call('positions_csv', reportFilter(domain, from, to, region, keywordQuery));
       const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
       const link = document.createElement('a');
       link.href = url;

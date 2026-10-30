@@ -6,6 +6,7 @@ import type { MagicSeoClient } from '../lib/magicseo/client.ts';
 import { harvest } from '../lib/positions/harvest.ts';
 import { projectsFromCatalog, type HarvestProject } from '../lib/positions/projects.ts';
 import { reportRows, toCsv, type ReportFilter, type ReportRow } from '../lib/positions/report.ts';
+import { toJson } from '../lib/json.ts';
 
 /** Written by positions_harvest_now when its harvest ends; read by the schedule. */
 export const LAST_RUN_KEY = 'pos-meta:last-run';
@@ -33,8 +34,8 @@ export function createPositionsHandlers(deps: PositionsDeps): PositionsHandlers 
   const report = async (filter: ReportFilter): Promise<ReportRow[]> =>
     reportRows(deps.kv, await projectsOfCatalog(), filter);
   return {
-    positions_report: report,
-    positions_csv: async (filter) => toCsv(await report(filter)),
+    positions_report: async (filter) => toJson(await report(filter)),
+    positions_csv: async (filter) => toJson(await toCsv(await report(filter))),
     positions_harvest_now: async () => {
       const result = await harvest({
         client: deps.client,
@@ -43,7 +44,7 @@ export function createPositionsHandlers(deps: PositionsDeps): PositionsHandlers 
         today: localDate(new Date()),
       });
       await deps.kv.set(LAST_RUN_KEY, { at: new Date().toISOString() });
-      return result;
+      return toJson(result);
     },
   };
 }

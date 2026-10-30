@@ -4,6 +4,7 @@ import { parseConfig, type Config, type SiteConfig } from '../lib/config.ts';
 import { appendLog, readLog, type KvLike } from '../lib/log-store.ts';
 import { runSite } from '../lib/automation/run.ts';
 import type { ActionResult } from '../lib/automation/executor.ts';
+import { toJson } from '../lib/json.ts';
 
 export const LIFECYCLE_LOG_MAX = 200;
 export const LAST_RUN_PREFIX = 'automation-last-run:';
@@ -84,18 +85,18 @@ export function createAutomationHandlers(deps: AutomationHandlerDeps) {
 
   return {
     async automation_preview(siteId: string): Promise<ActionResult[]> {
-      return run(siteId, 'dry-run');
+      return toJson(await run(siteId, 'dry-run'));
     },
 
     async automation_run(siteId: string): Promise<ActionResult[]> {
       const config = await deps.getConfig();
       const site = requireSite(config, siteId);
-      if (site.mode === 'off') return [];
-      return run(siteId, site.mode);
+      if (site.mode === 'off') return toJson([]);
+      return toJson(await run(siteId, site.mode));
     },
 
     async lifecycle_log(siteId: string): Promise<ActionResult[]> {
-      return (await readLog(deps.kv, lifecycleLogKey(siteId))) as ActionResult[];
+      return toJson((await readLog(deps.kv, lifecycleLogKey(siteId))) as ActionResult[]);
     },
 
     async site_save(site: unknown): Promise<SiteConfig> {
@@ -117,7 +118,7 @@ export function createAutomationHandlers(deps: AutomationHandlerDeps) {
         positionsIntervalHours: current.positionsIntervalHours,
       });
       await deps.saveConfig(parsed);
-      return parsed.sites.find((s) => s.id === id) as SiteConfig;
+      return toJson(parsed.sites.find((s) => s.id === id) as SiteConfig);
     },
   };
 }

@@ -71,6 +71,12 @@ export function buildHierarchy(rows: ProjectRow[], configuredDomains: string[]):
   const configured = new Set(configuredDomains);
   const order: string[] = [];
   const byDomain = new Map<string, ProjectRow[]>();
+  for (const domain of configuredDomains) {
+    if (!byDomain.has(domain)) {
+      byDomain.set(domain, []);
+      order.push(domain);
+    }
+  }
   for (const row of rows) {
     let list = byDomain.get(row.domain);
     if (!list) {
