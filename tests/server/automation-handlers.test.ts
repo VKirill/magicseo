@@ -130,6 +130,25 @@ test("site_save with mode 'auto' throws and keeps the previous site", async () =
   assert.deepEqual(getConfig(), before);
 });
 
+function assertNoUndefined(value: unknown, path: string): void {
+  if (value === undefined) assert.fail(`undefined at ${path}`);
+  if (value === null || typeof value !== 'object') return;
+  if (Array.isArray(value)) {
+    value.forEach((item, i) => assertNoUndefined(item, `${path}[${i}]`));
+    return;
+  }
+  for (const [key, field] of Object.entries(value as Record<string, unknown>)) {
+    assertNoUndefined(field, `${path}.${key}`);
+  }
+}
+
+test('automation_preview result has no undefined value', async () => {
+  const { handlers } = harness('live');
+  const results = await handlers.automation_preview(DEFAULT_CONFIG.sites[0].id);
+  assert.ok(results.length > 0);
+  assertNoUndefined(results, '$result');
+});
+
 test('205 previews keep 200 log entries without keywords under 256 KiB', async () => {
   const { handlers, kv } = harness('live');
   const siteId = DEFAULT_CONFIG.sites[0].id;

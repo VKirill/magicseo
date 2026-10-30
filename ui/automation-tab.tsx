@@ -7,6 +7,7 @@ import { en, ru } from '../i18n/automation.ts';
 import type { SiteConfig } from '../lib/config.ts';
 import { resolveCity } from '../lib/cities/index.ts';
 import type { ActionResult } from '../lib/automation/executor.ts';
+import { toJson } from '../lib/json.ts';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import './automation-tab.css';
@@ -209,7 +210,7 @@ export function AutomationTab() {
     setBusy(true);
     setError('');
     try {
-      await rpc.call('site_save', { site: next });
+      await rpc.call('site_save', { site: toJson(next) });
       setDraft(next);
       setSites((current) => current.map((s) => (s.id === next.id ? next : s)));
     } catch (e) {

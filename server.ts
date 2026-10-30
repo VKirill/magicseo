@@ -6,6 +6,7 @@ import type { MutationEntry } from './lib/magicseo/types.ts';
 import { DEFAULT_CONFIG, parseConfig, type Config } from './lib/config.ts';
 import { loadLogin } from './lib/credentials.ts';
 import { buildHierarchy, rowsFromCatalog, type SiteNode } from './lib/hierarchy.ts';
+import { toJson } from './lib/json.ts';
 import { appendLog, readLog } from './lib/log-store.ts';
 import type { PluginContext } from './server/context.ts';
 import { automationHandlers, automationRpc, registerAutomation } from './server/automation.ts';
@@ -148,15 +149,15 @@ export default async function plugin(bb: BbPluginApi) {
     ]);
     const active: Record<number, boolean> = {};
     collectActive(catalog, active);
-    return {
+    return toJson({
       balanceRub: balance.money_balance / 100,
       sites: buildHierarchy(rowsFromCatalog(catalog, active), config.sites.map((s) => s.domain)),
-    };
+    });
   }
 
   async function projectKeywords(id: number) {
     const keywords = await client.keywordsV2(id, { offset: 0, limit: KEYWORDS_PAGE_LIMIT });
-    return {
+    return toJson({
       keywords: keywords.map((k) => {
         const last = k.checks?.length ? k.checks[k.checks.length - 1] : undefined;
         return {
@@ -167,7 +168,7 @@ export default async function plugin(bb: BbPluginApi) {
           foundUrl: last?.found_url ?? null,
         };
       }),
-    };
+    });
   }
 
   bb.rpc.register(rpcContract, {
@@ -177,21 +178,22 @@ export default async function plugin(bb: BbPluginApi) {
     project_keywords: ({ id }) => projectKeywords(id),
     project_start: async ({ id }) => {
       await startPromotion(client, id);
-      return { ok: true };
+      return toJson({ ok: true });
     },
     project_stop: async ({ id }) => {
       await stopPromotion(client, id);
-      return { ok: true };
+      return toJson({ ok: true });
     },
     positions_check: async ({ id }) => {
       await client.startPositionsJob(id);
-      return { ok: true };
+      return toJson({ ok: true });
     },
-    mutation_log: async () => ({
-      entries: (await readLog(bb.storage.kv, MUTATION_LOG_KEY)) as MutationEntry[],
-    }),
-    config: () => ctx.getConfig(),
-    save_config: (raw) => ctx.saveConfig(parseConfig(raw)),
+    mutation_log: async () =>
+      toJson({
+        entries: (await readLog(bb.storage.kv, MUTATION_LOG_KEY)) as MutationEntry[],
+      }),
+    config: async () => toJson(await ctx.getConfig()),
+    save_config: async (raw) => toJson(await ctx.saveConfig(parseConfig(raw))),
   });
 
   registerAutomation(ctx);
