@@ -72,7 +72,7 @@ export function planSite(input: PlanInput): Action[] {
         skippedCities.add(c.city);
         actions.push(
           cityAction(
-            { city: c.city, projectId: null, reason: 'unmapped_city', nearestStartUtc: null },
+            { city: c.city, reason: 'unmapped_city', nearestStartUtc: null },
             'skip',
             null,
             null,

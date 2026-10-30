@@ -1,0 +1,280 @@
+/*
+ * MagicSEO in the Pokecut look (docs/DESIGN.md): nested cards (a gray well with
+ * a hairline around a white card with a soft drop), segmented tabs with a
+ * raised white option, outlined white secondary buttons, soft tinted status
+ * pills. The --ms-* tokens read the theme's --pk-* tokens and fall back to BB's
+ * own palette, so the screen stays tidy under any BB theme, light or dark.
+ * Rules sit in the components layer: a Tailwind utility on an element wins.
+ */
+
+[data-bb-plugin='magicseo'],
+[data-bb-plugin-root]:not([data-bb-plugin]) {
+  --ms-well: var(--pk-well, color-mix(in oklab, var(--muted) 45%, var(--card)));
+  --ms-card: var(--pk-card, var(--card));
+  --ms-outline: var(--pk-outline, var(--input));
+  --ms-hairline: var(--pk-hairline, var(--border));
+  --ms-drop: var(--pk-drop, 0 1px 2px rgb(0 0 0 / 0.06));
+  --ms-card-drop: var(--pk-card-drop, none);
+  --ms-raise: 0 1px 3px 0 rgb(0 0 0 / 0.12);
+  --ms-accent: var(--pk-accent-gradient, linear-gradient(var(--primary), var(--primary)));
+  --ms-accent-edge: var(--pk-accent-edge, none);
+  --ms-success: var(--success);
+  --ms-success-text: var(--diff-added);
+  --ms-info: var(--timeline-accent);
+  --ms-warning: var(--warning);
+  --ms-warning-text: var(--warning-text);
+  --ms-danger-text: var(--destructive-text, var(--destructive));
+}
+
+@layer components {
+  /* Nested card: the well frames a header line and the white body card. */
+  .ms-panel {
+    min-width: 0;
+    max-width: 100%;
+    padding: 4px;
+    border: 1px solid var(--ms-hairline);
+    border-radius: 16px;
+    background-color: var(--ms-well);
+    box-shadow: var(--ms-card-drop);
+  }
+
+  .ms-panel-head {
+    display: flex;
+    min-width: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+  }
+
+  .ms-panel-body {
+    min-width: 0;
+    max-width: 100%;
+    padding: 12px;
+    border: 1px solid var(--ms-hairline);
+    border-radius: 12px;
+    background-color: var(--ms-card);
+    box-shadow: var(--ms-drop);
+  }
+
+  /* A single white card, for blocks that need no header well. */
+  .ms-card {
+    min-width: 0;
+    border: 1px solid var(--ms-hairline);
+    border-radius: 14px;
+    background-color: var(--ms-card);
+    box-shadow: var(--ms-drop);
+  }
+
+  /* Page header strip: a quiet card holding the title, balance and tabs. */
+  .ms-strip {
+    min-width: 0;
+    padding: 10px 14px;
+    border: 1px solid var(--ms-hairline);
+    border-radius: 14px;
+    background-color: var(--ms-well);
+  }
+
+  /* Raised white surface: secondary buttons on the well. */
+  .ms-raised {
+    border: 1px solid var(--ms-outline);
+    background-color: var(--ms-card);
+    box-shadow: var(--ms-drop);
+  }
+
+  /* Segmented control: a gray track, the chosen tab raised in white. */
+  .ms-seg {
+    display: inline-flex;
+    max-width: 100%;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--ms-hairline);
+    border-radius: 9px;
+    background-color: var(--ms-well);
+  }
+
+  .ms-seg-item {
+    border-radius: 6px;
+    color: var(--muted-foreground);
+    font-weight: 500;
+  }
+
+  .ms-seg-item:hover {
+    color: var(--foreground);
+  }
+
+  .ms-seg-item:is([aria-selected='true'], [data-state='active']) {
+    background-color: var(--ms-card);
+    box-shadow: var(--ms-raise);
+    color: var(--foreground);
+    font-weight: 600;
+  }
+
+  /* Status pills: fully rounded, soft tint, coloured text. */
+  .ms-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .ms-pill-success {
+    background-color: color-mix(in oklab, var(--ms-success) 14%, transparent);
+    color: var(--ms-success-text);
+  }
+
+  .ms-pill-info {
+    background-color: color-mix(in oklab, var(--ms-info) 13%, transparent);
+    color: var(--ms-info);
+  }
+
+  .ms-pill-warning {
+    background-color: color-mix(in oklab, var(--ms-warning) 16%, transparent);
+    color: var(--ms-warning-text);
+  }
+
+  .ms-pill-danger {
+    background-color: color-mix(in oklab, var(--destructive) 12%, transparent);
+    color: var(--ms-danger-text);
+  }
+
+  .ms-pill-neutral {
+    background-color: var(--ms-card);
+    box-shadow: inset 0 0 0 1px var(--ms-outline);
+    color: var(--foreground);
+  }
+
+  .ms-pill-muted {
+    background-color: color-mix(in oklab, var(--foreground) 7%, transparent);
+    color: var(--muted-foreground);
+  }
+
+  /* A failed action: a block-level danger note, not a pill. */
+  .ms-error {
+    border: 1px solid color-mix(in oklab, var(--destructive) 35%, transparent);
+    border-radius: 8px;
+    background-color: color-mix(in oklab, var(--destructive) 10%, var(--ms-card));
+    color: var(--ms-danger-text);
+  }
+
+  .ms-domain {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ms-col-city {
+    width: 11rem;
+  }
+
+  .ms-city {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .ms-title {
+    display: block;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-weight: 500;
+  }
+
+  .ms-id {
+    display: block;
+    color: var(--muted-foreground);
+    font-size: 11px;
+  }
+
+  /* The keyword count is a disclosure button: it expands the keyword list. */
+  .ms-expand {
+    padding: 1px 8px;
+    border: 1px solid var(--ms-outline);
+    border-radius: 8px;
+    background-color: var(--ms-card);
+    color: var(--foreground);
+    cursor: pointer;
+  }
+
+  .ms-expand:hover {
+    background-color: var(--state-hover, var(--ms-well));
+  }
+
+  .ms-expand:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--ring);
+  }
+
+  .ms-project-row[data-expanded='1'] {
+    background-color: color-mix(in oklab, var(--ms-info) 6%, transparent);
+  }
+
+  .ms-keywords-row:hover {
+    background-color: transparent;
+  }
+
+  .ms-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  /* The expanded keyword list under a project row. */
+  .ms-keywords {
+    display: grid;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ms-keyword {
+    display: flex;
+    min-width: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 10px;
+    padding: 4px 8px;
+    border-top: 1px solid var(--ms-hairline);
+    font-size: 12px;
+  }
+
+  .ms-keyword:first-child {
+    border-top: 0;
+  }
+
+  .ms-keyword-text {
+    min-width: 0;
+    flex: 1 1 16rem;
+    overflow-wrap: anywhere;
+  }
+
+  .ms-keyword-url {
+    min-width: 0;
+    flex-basis: 100%;
+    overflow: hidden;
+    color: var(--muted-foreground);
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ms-keyword-note {
+    margin: 0;
+    color: var(--muted-foreground);
+    font-size: 12px;
+  }
+
+  .ms-keyword-error {
+    margin: 0;
+    color: var(--ms-danger-text);
+    font-size: 12px;
+  }
+}

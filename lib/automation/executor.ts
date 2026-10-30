@@ -43,7 +43,7 @@ function result(a: Action, mode: ExecuteDeps['mode'], outcome: ActionResult['out
 function createdProjectId(res: unknown): number | null {
   if (res && typeof res === 'object' && 'id' in res) {
     const id = (res as { id: unknown }).id;
-    if (Number.isInteger(id)) return id;
+    if (typeof id === 'number' && Number.isInteger(id)) return id;
   }
   return null;
 }

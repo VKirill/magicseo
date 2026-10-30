@@ -1,0 +1,46 @@
+{
+  "name": "bb-plugin-magicseo",
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "bb": ">=0.46",
+    "bbPluginSdk": ">=0.6.49"
+  },
+  "bb": {
+    "name": "MagicSEO",
+    "description": "Site → city-project tree for MagicSEO promotion: state, spend, positions and manual start/stop.",
+    "branding": {
+      "icon": "Globe"
+    },
+    "server": "./server.ts",
+    "app": "./app.tsx"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.3.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@get-bb/plugin-sdk": "0.6.49",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "sonner": "^1.7.4",
+    "tailwind-merge": "^3.4.0",
+    "typescript": "^5.7.0"
+  },
+  "keywords": [
+    "bb",
+    "bb-plugin",
+    "magicseo",
+    "seo"
+  ],
+  "scripts": {
+    "test": "node --test tests/credentials.test.ts tests/hierarchy.test.ts tests/log-store.test.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "bb plugin build"
+  }
+}
