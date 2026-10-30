@@ -1,0 +1,76 @@
+/*
+ * Reports tab (T6): the filter bar, the accent harvest action and the
+ * keyword × date table. Colours come from the --ms-* tokens that app.css
+ * defines on the plugin root; they read the Pokecut --pk-* theme values, so
+ * no hex colour lives in this file.
+ */
+
+@layer components {
+  .ms-rep-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+  }
+
+  .ms-rep-field {
+    display: grid;
+    min-width: 0;
+    gap: 4px;
+  }
+
+  .ms-rep-label {
+    color: var(--muted-foreground);
+    font-size: 12px;
+  }
+
+  .ms-rep-control {
+    min-height: 32px;
+    padding: 4px 10px;
+    border: 1px solid var(--ms-outline);
+    border-radius: 8px;
+    background-color: var(--ms-card);
+    color: var(--foreground);
+    font-size: 13px;
+  }
+
+  .ms-rep-control:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--ring);
+  }
+
+  .ms-rep-actions {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  /* The one accent action of the screen: the Pokecut gradient on Harvest now. */
+  .ms-rep-accent {
+    background-image: var(--ms-accent);
+    box-shadow: var(--ms-drop);
+  }
+
+  .ms-rep-accent:hover {
+    box-shadow: var(--ms-raise);
+  }
+
+  .ms-rep-note {
+    margin: 0;
+    color: var(--muted-foreground);
+    font-size: 12px;
+  }
+
+  .ms-rep-kw {
+    min-width: 12rem;
+    max-width: 18rem;
+    overflow-wrap: anywhere;
+    font-weight: 500;
+  }
+
+  .ms-rep-cell {
+    text-align: center;
+    white-space: nowrap;
+  }
+}
