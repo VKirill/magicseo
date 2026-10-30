@@ -1,0 +1,1367 @@
+{
+ "source": "atmosphere-show.ru gorod-kontserta terms + MagicSEO bundle code2regions (2026-10-30)",
+ "cities": [
+  {
+   "termId": 67,
+   "name": "Абакан",
+   "slug": "abakan",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    1095
+   ]
+  },
+  {
+   "termId": 68,
+   "name": "Альметьевск",
+   "slug": "almetevsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11121
+   ]
+  },
+  {
+   "termId": 48,
+   "name": "Ангарск",
+   "slug": "angarsk",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    11256
+   ]
+  },
+  {
+   "termId": 69,
+   "name": "Арзамас",
+   "slug": "arzamas",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11080
+   ]
+  },
+  {
+   "termId": 70,
+   "name": "Архангельск",
+   "slug": "arhangelsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    20
+   ]
+  },
+  {
+   "termId": 71,
+   "name": "Астрахань",
+   "slug": "astrahan",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    37
+   ]
+  },
+  {
+   "termId": 72,
+   "name": "Ачинск",
+   "slug": "achinsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11302
+   ]
+  },
+  {
+   "termId": 73,
+   "name": "Балаково",
+   "slug": "balakovo",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11143
+   ]
+  },
+  {
+   "termId": 74,
+   "name": "Барнаул",
+   "slug": "barnaul",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    197
+   ]
+  },
+  {
+   "termId": 34,
+   "name": "Белгород",
+   "slug": "belgorod",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    4
+   ]
+  },
+  {
+   "termId": 65,
+   "name": "Бийск",
+   "slug": "biysk",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    975
+   ]
+  },
+  {
+   "termId": 75,
+   "name": "Благовещенск",
+   "slug": "blagoveshchensk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    77,
+    11112
+   ]
+  },
+  {
+   "termId": 76,
+   "name": "Братск",
+   "slug": "bratsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    976
+   ]
+  },
+  {
+   "termId": 77,
+   "name": "Брест",
+   "slug": "brest",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    153
+   ]
+  },
+  {
+   "termId": 78,
+   "name": "Брянск",
+   "slug": "bryansk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    191
+   ]
+  },
+  {
+   "termId": 79,
+   "name": "Великий Новгород",
+   "slug": "velikiy-novgorod",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    24
+   ]
+  },
+  {
+   "termId": 80,
+   "name": "Витебск",
+   "slug": "vitebsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    154
+   ]
+  },
+  {
+   "termId": 81,
+   "name": "Владивосток",
+   "slug": "vladivostok",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    75
+   ]
+  },
+  {
+   "termId": 82,
+   "name": "Владикавказ",
+   "slug": "vladikavkaz",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    33
+   ]
+  },
+  {
+   "termId": 83,
+   "name": "Владимир",
+   "slug": "vladimir",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    192
+   ]
+  },
+  {
+   "termId": 37,
+   "name": "Волгоград",
+   "slug": "volgograd",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    38
+   ]
+  },
+  {
+   "termId": 30,
+   "name": "Волгодонск",
+   "slug": "volgodonsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11036
+   ]
+  },
+  {
+   "termId": 84,
+   "name": "Волжск",
+   "slug": "volzhsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    20721
+   ]
+  },
+  {
+   "termId": 45,
+   "name": "Волжский",
+   "slug": "volzhskiy",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    10951
+   ]
+  },
+  {
+   "termId": 85,
+   "name": "Вологда",
+   "slug": "vologda",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    21
+   ]
+  },
+  {
+   "termId": 20,
+   "name": "Воронеж",
+   "slug": "voronezh",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    193
+   ]
+  },
+  {
+   "termId": 23,
+   "name": "Воскресенск",
+   "slug": "voskresensk",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    10722
+   ]
+  },
+  {
+   "termId": 172,
+   "name": "Воткинск",
+   "slug": "votkinsk",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    11149
+   ]
+  },
+  {
+   "termId": 86,
+   "name": "Геленджик",
+   "slug": "gelendzhik",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    10990
+   ]
+  },
+  {
+   "termId": 87,
+   "name": "Георгиевск",
+   "slug": "georgievsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11056
+   ]
+  },
+  {
+   "termId": 88,
+   "name": "Гродно",
+   "slug": "grodno",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    10274
+   ]
+  },
+  {
+   "termId": 89,
+   "name": "Грозный",
+   "slug": "groznyy",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    1106
+   ]
+  },
+  {
+   "termId": 25,
+   "name": "Губкин",
+   "slug": "gubkin",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    10646
+   ]
+  },
+  {
+   "termId": 40,
+   "name": "Дзержинск",
+   "slug": "dzerzhinsk",
+   "concerts": 1,
+   "yandexRegionCandidates": []
+  },
+  {
+   "termId": 90,
+   "name": "Димитровград",
+   "slug": "dimitrovgrad",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11155
+   ]
+  },
+  {
+   "termId": 164,
+   "name": "Долгопрудный",
+   "slug": "dolgoprudnyy",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    214
+   ]
+  },
+  {
+   "termId": 91,
+   "name": "Дудинка",
+   "slug": "dudinka",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11344
+   ]
+  },
+  {
+   "termId": 47,
+   "name": "Ейск",
+   "slug": "eysk",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    10993
+   ]
+  },
+  {
+   "termId": 21,
+   "name": "Екатеринбург",
+   "slug": "ekaterinburg",
+   "concerts": 3,
+   "yandexRegionCandidates": [
+    54
+   ]
+  },
+  {
+   "termId": 92,
+   "name": "Железногорск",
+   "slug": "zheleznogorsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    10710,
+    20086
+   ]
+  },
+  {
+   "termId": 93,
+   "name": "Зеленогорск",
+   "slug": "zelenogorsk",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    20088,
+    37180
+   ]
+  },
+  {
+   "termId": 12,
+   "name": "Зеленоград",
+   "slug": "zelenograd",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    216
+   ]
+  },
+  {
+   "termId": 94,
+   "name": "Златоуст",
+   "slug": "zlatoust",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11202
+   ]
+  },
+  {
+   "termId": 95,
+   "name": "Ижевск",
+   "slug": "izhevsk",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    44
+   ]
+  },
+  {
+   "termId": 39,
+   "name": "Иркутск",
+   "slug": "irkutsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    63
+   ]
+  },
+  {
+   "termId": 26,
+   "name": "Йошкар-Ола",
+   "slug": "joshkar-ola",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    41
+   ]
+  },
+  {
+   "termId": 22,
+   "name": "Калининград",
+   "slug": "kaliningrad",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    22
+   ]
+  },
+  {
+   "termId": 96,
+   "name": "Калуга",
+   "slug": "kaluga",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    6
+   ]
+  },
+  {
+   "termId": 97,
+   "name": "Каменск-Уральский",
+   "slug": "kamensk-uralskiy",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11164
+   ]
+  },
+  {
+   "termId": 98,
+   "name": "Каменск-Шахтинский",
+   "slug": "kamensk-shahtinskiy",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11043
+   ]
+  },
+  {
+   "termId": 99,
+   "name": "Канск",
+   "slug": "kansk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11307
+   ]
+  },
+  {
+   "termId": 100,
+   "name": "Кемерово",
+   "slug": "kemerovo",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    64
+   ]
+  },
+  {
+   "termId": 57,
+   "name": "Киров",
+   "slug": "kirov",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    46,
+    20200
+   ]
+  },
+  {
+   "termId": 101,
+   "name": "Клин",
+   "slug": "klin",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    10733
+   ]
+  },
+  {
+   "termId": 31,
+   "name": "Комсомольск-на-Амуре",
+   "slug": "komsomolsk-na-amure",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11453
+   ]
+  },
+  {
+   "termId": 102,
+   "name": "Королев",
+   "slug": "korolev",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    20728
+   ]
+  },
+  {
+   "termId": 103,
+   "name": "Кострома",
+   "slug": "kostroma",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    7
+   ]
+  },
+  {
+   "termId": 104,
+   "name": "Краснодар",
+   "slug": "krasnodar",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    35
+   ]
+  },
+  {
+   "termId": 42,
+   "name": "Красноярск",
+   "slug": "krasnoyarsk",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    62
+   ]
+  },
+  {
+   "termId": 105,
+   "name": "Кропоткин",
+   "slug": "kropotkin",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    10996
+   ]
+  },
+  {
+   "termId": 166,
+   "name": "Кудрово",
+   "slug": "kudrovo",
+   "concerts": 2,
+   "yandexRegionCandidates": []
+  },
+  {
+   "termId": 106,
+   "name": "Кунгур",
+   "slug": "kungur",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    20250
+   ]
+  },
+  {
+   "termId": 46,
+   "name": "Курган",
+   "slug": "kurgan",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    53
+   ]
+  },
+  {
+   "termId": 107,
+   "name": "Курск",
+   "slug": "kursk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    8
+   ]
+  },
+  {
+   "termId": 36,
+   "name": "Липецк",
+   "slug": "lipetsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    9
+   ]
+  },
+  {
+   "termId": 56,
+   "name": "Магнитогорск",
+   "slug": "magnitogorsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    235
+   ]
+  },
+  {
+   "termId": 108,
+   "name": "Майкоп",
+   "slug": "maykop",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    1093
+   ]
+  },
+  {
+   "termId": 109,
+   "name": "Махачкала",
+   "slug": "mahachkala",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    28
+   ]
+  },
+  {
+   "termId": 110,
+   "name": "Минск",
+   "slug": "minsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    157
+   ]
+  },
+  {
+   "termId": 111,
+   "name": "Мичуринск",
+   "slug": "michurinsk",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    10803
+   ]
+  },
+  {
+   "termId": 112,
+   "name": "Могилев",
+   "slug": "mogilev",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    158
+   ]
+  },
+  {
+   "termId": 158,
+   "name": "Москва",
+   "slug": "moskva",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    213
+   ]
+  },
+  {
+   "termId": 169,
+   "name": "Московская область",
+   "slug": "moscow-region",
+   "concerts": 21,
+   "yandexRegionCandidates": []
+  },
+  {
+   "termId": 157,
+   "name": "Мытищи",
+   "slug": "mytishchi",
+   "concerts": 4,
+   "yandexRegionCandidates": [
+    10740
+   ]
+  },
+  {
+   "termId": 113,
+   "name": "Набережные Челны",
+   "slug": "naberezhnye-chelny",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    236
+   ]
+  },
+  {
+   "termId": 114,
+   "name": "Находка",
+   "slug": "nahodka",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    974
+   ]
+  },
+  {
+   "termId": 168,
+   "name": "Невинномысск",
+   "slug": "nevinnomyssk",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    11064
+   ]
+  },
+  {
+   "termId": 115,
+   "name": "Нижнекамск",
+   "slug": "nizhnekamsk",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    11127
+   ]
+  },
+  {
+   "termId": 35,
+   "name": "Нижний Новгород",
+   "slug": "nizhniy-novgorod",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    47
+   ]
+  },
+  {
+   "termId": 116,
+   "name": "Нижний Тагил",
+   "slug": "nizhniy-tagil",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11168
+   ]
+  },
+  {
+   "termId": 117,
+   "name": "Новокузнецк",
+   "slug": "novokuznetsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    237
+   ]
+  },
+  {
+   "termId": 118,
+   "name": "Новороссийск",
+   "slug": "novorossiysk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    970
+   ]
+  },
+  {
+   "termId": 53,
+   "name": "Новосибирск",
+   "slug": "novosibirsk",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    65
+   ]
+  },
+  {
+   "termId": 58,
+   "name": "Новосибирск (Академгородок)",
+   "slug": "novosibirsk-akademgorodok",
+   "concerts": 0,
+   "yandexRegionCandidates": []
+  },
+  {
+   "termId": 119,
+   "name": "Новоуральск",
+   "slug": "novouralsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11170
+   ]
+  },
+  {
+   "termId": 120,
+   "name": "Новочеркасск",
+   "slug": "novocherkassk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    238
+   ]
+  },
+  {
+   "termId": 121,
+   "name": "Новый город",
+   "slug": "novyy-gorod",
+   "concerts": 0,
+   "yandexRegionCandidates": []
+  },
+  {
+   "termId": 122,
+   "name": "Норильск",
+   "slug": "norilsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11311
+   ]
+  },
+  {
+   "termId": 59,
+   "name": "Обнинск",
+   "slug": "obninsk",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    967
+   ]
+  },
+  {
+   "termId": 163,
+   "name": "Одинцово",
+   "slug": "odintsovo",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    10743
+   ]
+  },
+  {
+   "termId": 123,
+   "name": "Омск",
+   "slug": "omsk",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    66
+   ]
+  },
+  {
+   "termId": 124,
+   "name": "Орел",
+   "slug": "orel",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    10
+   ]
+  },
+  {
+   "termId": 50,
+   "name": "Оренбург",
+   "slug": "orenburg",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    48
+   ]
+  },
+  {
+   "termId": 61,
+   "name": "Орск",
+   "slug": "orsk",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    11091
+   ]
+  },
+  {
+   "termId": 6,
+   "name": "Пенза",
+   "slug": "penza",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    49
+   ]
+  },
+  {
+   "termId": 28,
+   "name": "Первоуральск",
+   "slug": "pervouralsk",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    11171
+   ]
+  },
+  {
+   "termId": 44,
+   "name": "Пермь",
+   "slug": "perm",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    50
+   ]
+  },
+  {
+   "termId": 125,
+   "name": "Петрозаводск",
+   "slug": "petrozavodsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    18
+   ]
+  },
+  {
+   "termId": 126,
+   "name": "Подольск",
+   "slug": "podolsk",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    10747
+   ]
+  },
+  {
+   "termId": 127,
+   "name": "Псков",
+   "slug": "pskov",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    25
+   ]
+  },
+  {
+   "termId": 128,
+   "name": "Пушкин",
+   "slug": "pushkin",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    10884
+   ]
+  },
+  {
+   "termId": 129,
+   "name": "Пятигорск",
+   "slug": "pyatigorsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11067
+   ]
+  },
+  {
+   "termId": 130,
+   "name": "Ростов-на-Дону",
+   "slug": "rostov-na-donu",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    39
+   ]
+  },
+  {
+   "termId": 131,
+   "name": "Рубцовск",
+   "slug": "rubtsovsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11251
+   ]
+  },
+  {
+   "termId": 132,
+   "name": "Рыбинск",
+   "slug": "rybinsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    10839
+   ]
+  },
+  {
+   "termId": 133,
+   "name": "Рязань",
+   "slug": "ryazan",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    11
+   ]
+  },
+  {
+   "termId": 134,
+   "name": "Салават",
+   "slug": "salavat",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11115
+   ]
+  },
+  {
+   "termId": 135,
+   "name": "Самара",
+   "slug": "samara",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    51
+   ]
+  },
+  {
+   "termId": 66,
+   "name": "Санкт-Петербург",
+   "slug": "sankt-peterburg",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    2
+   ]
+  },
+  {
+   "termId": 3,
+   "name": "Саранск",
+   "slug": "saransk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    42
+   ]
+  },
+  {
+   "termId": 136,
+   "name": "Саратов",
+   "slug": "saratov",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    194
+   ]
+  },
+  {
+   "termId": 137,
+   "name": "Саянск",
+   "slug": "sayansk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11269
+   ]
+  },
+  {
+   "termId": 138,
+   "name": "Севастополь",
+   "slug": "sevastopol",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    959
+   ]
+  },
+  {
+   "termId": 139,
+   "name": "Северодвинск",
+   "slug": "severodvinsk",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    10849
+   ]
+  },
+  {
+   "termId": 41,
+   "name": "Сергиев Посад",
+   "slug": "sergiev-posad",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    10752
+   ]
+  },
+  {
+   "termId": 11,
+   "name": "Серов",
+   "slug": "serov",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11172
+   ]
+  },
+  {
+   "termId": 140,
+   "name": "Симферополь",
+   "slug": "simferopol",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    146
+   ]
+  },
+  {
+   "termId": 141,
+   "name": "Смоленск",
+   "slug": "smolensk",
+   "concerts": 5,
+   "yandexRegionCandidates": [
+    12
+   ]
+  },
+  {
+   "termId": 33,
+   "name": "Соликамск",
+   "slug": "solikamsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11110
+   ]
+  },
+  {
+   "termId": 165,
+   "name": "Солнечногорск",
+   "slug": "solnechnogorsk",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    10755
+   ]
+  },
+  {
+   "termId": 142,
+   "name": "Сочи",
+   "slug": "sochi",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    239
+   ]
+  },
+  {
+   "termId": 143,
+   "name": "Ставрополь",
+   "slug": "stavropol",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    36
+   ]
+  },
+  {
+   "termId": 17,
+   "name": "Старый Оскол",
+   "slug": "staryj-oskol",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    10649
+   ]
+  },
+  {
+   "termId": 144,
+   "name": "Стерлитамак",
+   "slug": "sterlitamak",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11116
+   ]
+  },
+  {
+   "termId": 145,
+   "name": "Сургут",
+   "slug": "surgut",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    973
+   ]
+  },
+  {
+   "termId": 146,
+   "name": "Сызрань",
+   "slug": "syzran",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    11139
+   ]
+  },
+  {
+   "termId": 27,
+   "name": "Таганрог",
+   "slug": "taganrog",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    971
+   ]
+  },
+  {
+   "termId": 147,
+   "name": "Тамбов",
+   "slug": "tambov",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    13
+   ]
+  },
+  {
+   "termId": 16,
+   "name": "Тверь",
+   "slug": "tver",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    14
+   ]
+  },
+  {
+   "termId": 32,
+   "name": "Тольятти",
+   "slug": "tolyatti",
+   "concerts": 3,
+   "yandexRegionCandidates": [
+    240
+   ]
+  },
+  {
+   "termId": 24,
+   "name": "Томск",
+   "slug": "tomsk",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    67
+   ]
+  },
+  {
+   "termId": 64,
+   "name": "Тула",
+   "slug": "tula",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    15
+   ]
+  },
+  {
+   "termId": 148,
+   "name": "Тюмень",
+   "slug": "tyumen",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    55
+   ]
+  },
+  {
+   "termId": 162,
+   "name": "Улан-Удэ",
+   "slug": "ulan-ude",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    198
+   ]
+  },
+  {
+   "termId": 38,
+   "name": "Ульяновск",
+   "slug": "ulyanovsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    195
+   ]
+  },
+  {
+   "termId": 62,
+   "name": "Уссурийск",
+   "slug": "ussuriysk",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    11426
+   ]
+  },
+  {
+   "termId": 149,
+   "name": "Усть-Илимск",
+   "slug": "ust-ilimsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11273
+   ]
+  },
+  {
+   "termId": 150,
+   "name": "Уфа",
+   "slug": "ufa",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    172
+   ]
+  },
+  {
+   "termId": 161,
+   "name": "Фрязино",
+   "slug": "fryazino",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    21619
+   ]
+  },
+  {
+   "termId": 54,
+   "name": "Хабаровск",
+   "slug": "habarovsk",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    76
+   ]
+  },
+  {
+   "termId": 63,
+   "name": "Чебоксары",
+   "slug": "cheboksary",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    45
+   ]
+  },
+  {
+   "termId": 151,
+   "name": "Челябинск",
+   "slug": "chelyabinsk",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    56
+   ]
+  },
+  {
+   "termId": 152,
+   "name": "Череповец",
+   "slug": "cherepovets",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    968
+   ]
+  },
+  {
+   "termId": 167,
+   "name": "Черногорск",
+   "slug": "chernogorsk",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    11342
+   ]
+  },
+  {
+   "termId": 153,
+   "name": "Чита",
+   "slug": "chita",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    68
+   ]
+  },
+  {
+   "termId": 160,
+   "name": "Щелково",
+   "slug": "shchelkovo",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    10765
+   ]
+  },
+  {
+   "termId": 43,
+   "name": "Электросталь",
+   "slug": "elektrostal",
+   "concerts": 2,
+   "yandexRegionCandidates": [
+    20523
+   ]
+  },
+  {
+   "termId": 55,
+   "name": "Элиста",
+   "slug": "elista",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    1094
+   ]
+  },
+  {
+   "termId": 60,
+   "name": "Энгельс",
+   "slug": "engels",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    11147
+   ]
+  },
+  {
+   "termId": 154,
+   "name": "Южно-Сахалинск",
+   "slug": "yuzhno-sahalinsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    80
+   ]
+  },
+  {
+   "termId": 155,
+   "name": "Якутск",
+   "slug": "yakutsk",
+   "concerts": 0,
+   "yandexRegionCandidates": [
+    74
+   ]
+  },
+  {
+   "termId": 29,
+   "name": "Ярославль",
+   "slug": "yaroslavl",
+   "concerts": 1,
+   "yandexRegionCandidates": [
+    16
+   ]
+  }
+ ]
+}
