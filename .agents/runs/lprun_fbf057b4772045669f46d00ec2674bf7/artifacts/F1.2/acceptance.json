@@ -1,0 +1,15 @@
+{
+  "schema_version": 2,
+  "task_id": "F1.2",
+  "task_sha256": "3ad0236f2b90578f82e3eb2bc07427bc1cd9eed6700ba5f882b90bd0af5f91ea",
+  "attempt": 2,
+  "provider_exit": 0,
+  "report": "complete",
+  "report_sha256": "909623e053140fee7ba380f226f477fb48c9bf404c946dc3caa1d39f4444d059",
+  "owns_check": "passed",
+  "verification": "passed",
+  "review": "passed",
+  "accepted": true,
+  "accepted_at": "2026-10-30T19:56:53.541Z",
+  "model": "zai-coding-plan/glm-5.3-flash"
+}
