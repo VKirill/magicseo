@@ -1,0 +1,1159 @@
+{
+  "tasks": [
+    {
+      "schema_version": 2,
+      "id": "T1",
+      "title": "Клиент API MagicSEO и управление продвижением",
+      "display_title": "Клиент API MagicSEO и управление продвижением",
+      "kind": "feature",
+      "quality_mode": "full",
+      "risk": "high",
+      "lane": "writer",
+      "project_cwd": "/Users/vechkasov/Documents/BB-сервис/plugins/magicseo",
+      "covers": [
+        "D6",
+        "D7"
+      ],
+      "read_first": [
+        ".agents/phases/ph_f16b2b8b06/CONTEXT.md",
+        ".agents/phases/ph_f16b2b8b06/SECURITY.md",
+        ".agents/plans/magicseo-api/api-map.md",
+        ".agents/plans/magicseo-api/endpoints.json",
+        ".agents/plans/magicseo-api/bundle-notes.md",
+        ".agents/plans/magicseo-api/shapes.md",
+        ".gitignore",
+        ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-repo-pulse/package.json.txt",
+        ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-repo-pulse/tsconfig.json.txt",
+        ".agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs"
+      ],
+      "owns_paths": [
+        "package.json",
+        "package-lock.json",
+        "tsconfig.json",
+        "lib/magicseo/**",
+        "tests/magicseo/**"
+      ],
+      "never_touch": [
+        ".env*",
+        ".bb/**",
+        ".agents/**",
+        "AGENTS.md",
+        ".gitignore"
+      ],
+      "expected_outputs": [
+        "package.json",
+        "package-lock.json",
+        "tsconfig.json",
+        "lib/magicseo/client.ts",
+        "lib/magicseo/types.ts",
+        "lib/magicseo/lifecycle.ts",
+        "tests/magicseo/client.test.ts",
+        "tests/magicseo/lifecycle.test.ts"
+      ],
+      "interfaces": [
+        "MagicSeoClient constructor({credentials:()=>Promise<{username,password}>,fetch?:typeof fetch,baseUrl?:string,onMutation?:(event)=>Promise<void>|void}); default origin https://lk.magicseo.ru. Public methods and exact routes are enumerated in contracts-v2/check.mjs T1 cases.",
+        "Reads: listProjects(), catalogItems(), getProject(id), getAutolaunch(id), keywordsV2(id,{offset,limit,from?,to?}), positions(id,{from,to}) with checks_mode=one_per_day, positionsJob(id), balance(), balanceDetailed(), listFolders(), keywordsImportPattern(). Preserve pagination total through an explicit typed envelope where needed and document it in types.ts; list methods used by automation return complete arrays after pagination.",
+        "Writes: createProject(body), copyProject(body), updateProject(id,body), startJob(id), stopJob(id), setAutolaunch(id,body), resetAutolaunchError(id), startPositionsJob(id), uploadKeywords(id,csvText), setKeywordsField(id,body), createFolder(body), moveCatalogItem(id,body). Multipart field is file. regions are integer Yandex geo ids.",
+        "startPromotion(client,id) enables autolaunch.active and verifies GET active:true. One-off POST /job is the separate startJob method. stopPromotion(client,id) disables autolaunch, DELETEs /job and verifies active:false; only successful DELETE or explicit HTTP 404 no-job is an acknowledgment; an error envelope is a failure. Retry stop at most 3 times then throw StopFailedError {projectId,attempts:3}.",
+        "package.json: name bb-plugin-magicseo, type module; @get-bb/plugin-sdk 0.6.104, zod, dev-only react/react-dom/runtime shims, typescript, vitest, jsdom and @testing-library/react; scripts test/typecheck/build. T3 adds bb.server; T4 adds bb.app. tsconfig allows .ts imports, strict noEmit bundler resolution and @/* alias. Use installed public SDK types, not private BB imports. Include @types/node/react/react-dom, clsx, tailwind-merge, class-variance-authority and the registry runtime shims used by button/table/input/switch/alert-dialog so T4 needs no dependency or lockfile update."
+      ],
+      "invariants": [
+        "Pure lib modules use node: built-ins, type-only SDK imports and relative .ts imports; Node 26 runs their contracts without a transpiler.",
+        "SECURITY.md: fake credentials may be used in tests; credential values and JWTs are excluded from files, KV, errors, audit entries and browser responses.",
+        "Unwrap result for successful envelopes; retain raw balance objects. HTTP 200 with nonempty error fails; error messages use method/path/status and omit server body.",
+        "JWT is process-memory only; concurrent login is single-flight; re-login once on 401; network timeouts of POST create/upload/check/job are surfaced without blind replay. Await one sanitized audit callback per mutation attempt; login is excluded.",
+        "Do not expose arbitrary authenticated URL forwarding, payments, balance transfer, access control, administrator operations or project deletion."
+      ],
+      "out_of_scope": [
+        "Live cabinet mutation probes; full parity for support/referrals/competitors/help/billing-payment/account management; Env Catalog RPC adapter belongs to T3."
+      ],
+      "depends_on": [],
+      "objective": "Implement the cabinet client for the core project/keyword/region/promotion/autolaunch/position/balance operations enumerated below. Provide a dependency manifest usable by later BB tasks; install dependencies here. All verification uses injected fetch and fake credentials, with zero live mutations.",
+      "acceptance": [
+        "`node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T1` exits 0 and prints `PASS T1`; the fake transport asserts all 23 method/path pairs, Bearer JWT reuse, one re-login on 401, multipart file, checks_mode=one_per_day and redaction of injected secret markers.",
+        "`node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T1` exits 0 and prints `PASS T1`; the lifecycle fake reaches active:true on start, active:false plus DELETE on stop, and exactly 3 failed stop attempts before rejection. Add owned tests for concurrent login, raw balance, pagination, HTTP-200 errors, no-job 404 and audit failures; the checker also runs those exact owned test files."
+      ],
+      "verify": "tests",
+      "verification": [
+        {
+          "command": "node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T1",
+          "cwd": "."
+        }
+      ],
+      "files": [
+        {
+          "path": "package.json",
+          "action": "create",
+          "change": "Declare the listed build/test dependencies and scripts without a bb.app entry."
+        },
+        {
+          "path": "package-lock.json",
+          "action": "create",
+          "change": "Lock the manifest and install dependencies."
+        },
+        {
+          "path": "tsconfig.json",
+          "action": "create",
+          "change": "Configure strict noEmit TypeScript and @/* resolution."
+        },
+        {
+          "path": "lib/magicseo/client.ts",
+          "action": "create",
+          "change": "Implement documented routes, authentication, envelopes, multipart and sanitized audit."
+        },
+        {
+          "path": "lib/magicseo/types.ts",
+          "action": "create",
+          "change": "Type response envelopes, raw balance, projects, autolaunch and checks from recon."
+        },
+        {
+          "path": "lib/magicseo/lifecycle.ts",
+          "action": "create",
+          "change": "Implement autolaunch enable and bounded stop verification."
+        },
+        {
+          "path": "tests/magicseo/client.test.ts",
+          "action": "create",
+          "change": "Cover pagination, concurrent login, raw responses and mutation error behavior."
+        },
+        {
+          "path": "tests/magicseo/lifecycle.test.ts",
+          "action": "create",
+          "change": "Cover 404, error envelopes and 3-attempt stop failure."
+        }
+      ],
+      "appetite": {
+        "minutes": 60
+      }
+    },
+    {
+      "schema_version": 2,
+      "id": "T2",
+      "title": "Концерты, настройки сайтов и соответствие городов",
+      "display_title": "Концерты, настройки сайтов и соответствие городов",
+      "kind": "feature",
+      "quality_mode": "full",
+      "risk": "medium",
+      "lane": "writer",
+      "project_cwd": "/Users/vechkasov/Documents/BB-сервис/plugins/magicseo",
+      "covers": [
+        "D5",
+        "D6",
+        "D7",
+        "D8"
+      ],
+      "read_first": [
+        ".agents/phases/ph_f16b2b8b06/CONTEXT.md",
+        ".agents/phases/ph_f16b2b8b06/SECURITY.md",
+        ".agents/plans/concerts-api.md",
+        ".agents/plans/atmosphere-cities.json",
+        ".agents/plans/magicseo-regions.json",
+        ".agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs"
+      ],
+      "owns_paths": [
+        "lib/config.ts",
+        "lib/concerts/**",
+        "lib/cities/**",
+        "tests/config.test.ts",
+        "tests/concerts/**",
+        "tests/cities/**",
+        "tests/fixtures/concerts/**"
+      ],
+      "never_touch": [
+        ".env*",
+        ".bb/**",
+        ".agents/**",
+        "AGENTS.md",
+        ".gitignore"
+      ],
+      "expected_outputs": [
+        "lib/config.ts",
+        "lib/concerts/wordpress.ts",
+        "lib/cities/index.ts",
+        "lib/cities/cities.json",
+        "tests/config.test.ts",
+        "tests/concerts/wordpress.test.ts",
+        "tests/cities/cities.test.ts",
+        "tests/fixtures/concerts/page.json"
+      ],
+      "interfaces": [
+        "SiteConfig={id,domain,concerts:{baseUrl,postType,credentialName:string|null},nameTemplate,keywordTemplates:string[],cityAliases,regionOverrides,timeZoneOverrides,mode:'off'|'dry-run'|'live',stopHoursBefore:48,newProject:null|{provider,device,parentFolderId?,autolaunch}}; Config={sites,automationIntervalMinutes,positionsIntervalHours}; export parseConfig(raw), DEFAULT_CONFIG.",
+        "Default atmosphere-show.ru: public WP concerts source, credentialName:null, nameTemplate 'АТМОСФЕРА [%город%]', keywordTemplates ['оркестр при свечах %город%','3000 свечей %город%'], mode dry-run, newProject null, stopHoursBefore 48, automationIntervalMinutes 1, positionsIntervalHours 6. Unknown credential/password/token fields are rejected; optional WP credentialName is limited to ATMOSPHERE_WP_APP.",
+        "fetchConcerts({baseUrl,postType,fetch?,basicAuth?}) returns Concert[]={id,status,link,city,cityIn,date,time,soldOut,postponedTo,modifiedGmt}; follows X-WP-TotalPages with per_page=100&page=N; non-2xx or incomplete pagination throws, never an empty success snapshot.",
+        "resolveCity(name,{aliases?,regionOverrides?,timeZoneOverrides?}?) returns {name,region,timeZone}|null; cityByRegion(region) returns name|null; concertStartUtc({date,time},IANA):Date. Build the lookup from atmosphere-cities.json and magicseo-regions.json; do not download a bundle. Ambiguous mappings require regionOverrides."
+      ],
+      "invariants": [
+        "Pure lib modules use node: built-ins, type-only SDK imports and relative .ts imports; Node 26 runs their contracts without a transpiler.",
+        "SECURITY.md: fake credentials may be used in tests; credential values and JWTs are excluded from files, KV, errors, audit entries and browser responses.",
+        "WP requests are GET-only; public published reads send no Authorization. Credentials for optional authenticated reads are injected at runtime, never persisted by this module.",
+        "Timezone assignments are explicit IANA values; Intl validates them. No machine-timezone fallback or guessed region. Map postponed/sold-out fields without deciding their promotion policy.",
+        "stopHoursBefore accepts only 48. Config contains names and source URLs, never credential values."
+      ],
+      "out_of_scope": [
+        "WP writes, draft-based automation, sold-out/postponement decisions, promotion parameter values."
+      ],
+      "depends_on": [],
+      "objective": "Provide the read-only concert source and reusable per-site configuration, with deterministic city/region/timezone resolution. Adding another WordPress concert site changes configuration only. New-file names are declared in files; read_first includes existing source-of-truth inputs.",
+      "acceptance": [
+        "`node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T2` exits 0 and prints `PASS T2`; the config assertions reject stopHoursBefore 47, mode auto and a password field; accept two site configurations; default mode is dry-run and newProject is null. SECURITY.md: credential-value fields are rejected by schema rather than stored in config.",
+        "`node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T2` exits 0 and prints `PASS T2`; the city corpus resolves every unique region candidate, leaves ambiguous cities null, converts Воткинск 2027-01-31 19:00 to 2027-01-31T15:00:00.000Z; a two-page WP fake produces two concerts using GET without Authorization and rejects HTTP 500."
+      ],
+      "verify": "tests",
+      "verification": [
+        {
+          "command": "node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T2",
+          "cwd": "."
+        }
+      ],
+      "files": [
+        {
+          "path": "lib/config.ts",
+          "action": "create",
+          "change": "Implement strict reusable site settings and fixed 48-hour threshold."
+        },
+        {
+          "path": "lib/concerts/wordpress.ts",
+          "action": "create",
+          "change": "Read and normalize all WP pages with an injected fetch."
+        },
+        {
+          "path": "lib/cities/index.ts",
+          "action": "create",
+          "change": "Resolve aliases, explicit overrides and local concert times."
+        },
+        {
+          "path": "lib/cities/cities.json",
+          "action": "create",
+          "change": "Record source-derived region candidates and IANA zones."
+        },
+        {
+          "path": "tests/config.test.ts",
+          "action": "create",
+          "change": "Cover invalid secrets, duplicate ids/domains and two sites."
+        },
+        {
+          "path": "tests/concerts/wordpress.test.ts",
+          "action": "create",
+          "change": "Cover pagination failure and optional injected Basic auth on GET."
+        },
+        {
+          "path": "tests/cities/cities.test.ts",
+          "action": "create",
+          "change": "Cover the corpus, overrides and exact UTC instants."
+        },
+        {
+          "path": "tests/fixtures/concerts/page.json",
+          "action": "create",
+          "change": "Use synthetic dates and cities; exclude account and credential data."
+        }
+      ],
+      "appetite": {
+        "minutes": 60
+      }
+    },
+    {
+      "schema_version": 2,
+      "id": "T3",
+      "title": "Серверное API BB, доступ к секретам и журнал действий",
+      "display_title": "Серверное API BB, доступ к секретам и журнал действий",
+      "kind": "feature",
+      "quality_mode": "full",
+      "risk": "high",
+      "lane": "writer",
+      "project_cwd": "/Users/vechkasov/Documents/BB-сервис/plugins/magicseo",
+      "covers": [
+        "D1",
+        "D6",
+        "D7"
+      ],
+      "read_first": [
+        ".agents/phases/ph_f16b2b8b06/CONTEXT.md",
+        ".agents/phases/ph_f16b2b8b06/SECURITY.md",
+        ".agents/plans/magicseo-api/api-map.md",
+        ".agents/plans/magicseo-api/endpoints.json",
+        ".agents/plans/magicseo-api/bundle-notes.md",
+        ".agents/plans/magicseo-api/shapes.md",
+        "package.json",
+        "tsconfig.json",
+        "lib/magicseo/client.ts",
+        "lib/magicseo/types.ts",
+        "lib/magicseo/lifecycle.ts",
+        "lib/config.ts",
+        "lib/cities/index.ts",
+        ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-repo-pulse/server.ts.txt",
+        ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-env-catalog/server.ts.txt",
+        ".agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs"
+      ],
+      "owns_paths": [
+        "package.json",
+        "README.md",
+        "server.ts",
+        "server/context.ts",
+        "server/api.ts",
+        "server/automation.ts",
+        "server/positions.ts",
+        "lib/credentials.ts",
+        "lib/hierarchy.ts",
+        "lib/log-store.ts",
+        "tests/server/api.test.ts",
+        "tests/credentials.test.ts",
+        "tests/hierarchy.test.ts",
+        "tests/log-store.test.ts"
+      ],
+      "never_touch": [
+        ".env*",
+        ".bb/**",
+        ".agents/**",
+        "AGENTS.md",
+        ".gitignore",
+        "tests/magicseo/**",
+        "tests/config.test.ts",
+        "tests/concerts/**",
+        "tests/cities/**"
+      ],
+      "expected_outputs": [
+        "package.json",
+        "README.md",
+        "server.ts",
+        "server/context.ts",
+        "server/api.ts",
+        "server/automation.ts",
+        "server/positions.ts",
+        "lib/credentials.ts",
+        "lib/hierarchy.ts",
+        "lib/log-store.ts",
+        "tests/server/api.test.ts",
+        "tests/credentials.test.ts",
+        "tests/hierarchy.test.ts",
+        "tests/log-store.test.ts"
+      ],
+      "interfaces": [
+        "loadLogin(callRpc,name) calls {pluginId:'env-catalog',method:'env_get_value',input:{name}} and returns access.username/password; credentials callback requests MAGICSEO_LOGIN on login/re-login only.",
+        "rowsFromCatalog(catalog,activeById):ProjectRow[] walks items/children and reads project_info; money fields period_money_spent and total_money_spent divide by 100 to periodSpent/totalSpent. buildHierarchy(rows,configuredDomains):SiteNode[] groups by normalized domain, then cityByRegion. ProjectRow={id,name,domain,region,active,keywords,periodSpent,totalSpent,lastJobStatus}; SiteNode={domain,configured,projects:(ProjectRow & {city})[]}.",
+        "createApiHandlers({client,kv,getConfig,saveConfig,now}) returns tree(), project_keywords({id}), project_start({id}), project_stop({id}), project_job_start({id}), project_autolaunch({id,settings}), positions_check({id}), mutation_log(), config(), save_config({config}). Validate all inputs inside the independently testable handler factory as well as RPC schemas. project_start uses startPromotion; separate project_job_start uses startJob. save_config cannot elevate a site to live: reject with live_confirmation_required; T6 automation_set_mode is the only live-mode transition.",
+        "appendLog(kv,key,entry,max), readLog(kv,key); mutation-log keeps <=500 entries of method/path/status/ok/at, each KV JSON UTF-8 value <262144 bytes. Await persistence in the client's audit hook.",
+        "PluginContext={bb,client,kv,getConfig,saveConfig}; server/automation.ts exports automationRpc={}, automationHandlers(ctx)=>{}, registerAutomation(ctx) and server/positions.ts analogous exports positionsRpc/positionsHandlers/registerPositions; T6/T7 replace these adapters. server.ts merges contracts/handlers and invokes both register functions."
+      ],
+      "invariants": [
+        "Pure lib modules use node: built-ins, type-only SDK imports and relative .ts imports; Node 26 runs their contracts without a transpiler.",
+        "SECURITY.md: fake credentials may be used in tests; credential values and JWTs are excluded from files, KV, errors, audit entries and browser responses.",
+        "Only BB authenticated RPC surfaces; no unauthenticated HTTP route or persisted service token. Every cabinet mutation uses the T1 audit hook.",
+        "A project is identified by domain+region, not its title; show duplicate city projects rather than inventing a task entity.",
+        "Missing Env Catalog access produces a code/name, never the secret record or raw upstream body. README records the SECURITY.md password rotation prerequisite for live promotion; rotation itself is an owner action."
+      ],
+      "out_of_scope": [
+        "Frontend belongs to T4; concert automation belongs to T5/T6; position history belongs to T7; public unauthenticated HTTP service."
+      ],
+      "depends_on": [
+        "T1",
+        "T2"
+      ],
+      "objective": "Expose our service as the authenticated BB plugin backend RPC, avoiding a separate daemon/token store. Connect cabinet reads and manual promotion/one-off job/autolaunch/position-check actions through typed input schemas, Env Catalog runtime credentials and bounded mutation audit. Supply extension adapters so later tasks can register automation and position RPC without editing server.ts.",
+      "acceptance": [
+        "`node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T3` exits 0 and prints `PASS T3`; the Env Catalog fake receives exactly env_get_value(MAGICSEO_LOGIN), the hierarchy fixture produces Москва with spend 798 rubles from 79800 kopecks, and mutation-log holds 500 of 502 appended entries.",
+        "`node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T3` exits 0 and prints `PASS T3`; API fakes return balanceRub 100, route project_start to autolaunch and positions_check to the check job, reject id -1 and exclude the fake password from mutation_log. Owned server tests exercise SDK registration, rejected inputs and redaction. SECURITY.md: runtime access stays in the credentials callback and the audit response excludes injected credential values. A direct save_config that changes dry-run to live rejects."
+      ],
+      "verify": "tests",
+      "verification": [
+        {
+          "command": "node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T3",
+          "cwd": "."
+        }
+      ],
+      "files": [
+        {
+          "path": "package.json",
+          "action": "modify",
+          "change": "Add ./server.ts as the plugin backend entry; retain T1 dependency versions."
+        },
+        {
+          "path": "README.md",
+          "action": "create",
+          "change": "Document RPC, Env Catalog names, hierarchy, safety boundaries, deployment/rollback and password-rotation prerequisite in Russian."
+        },
+        {
+          "path": "server.ts",
+          "action": "create",
+          "change": "Register authenticated core RPC and extension adapters."
+        },
+        {
+          "path": "server/context.ts",
+          "action": "create",
+          "change": "Type the shared client/config/KV dependencies."
+        },
+        {
+          "path": "server/api.ts",
+          "action": "create",
+          "change": "Implement validated service handlers."
+        },
+        {
+          "path": "server/automation.ts",
+          "action": "create",
+          "change": "Create the empty exports consumed by server.ts for T6."
+        },
+        {
+          "path": "server/positions.ts",
+          "action": "create",
+          "change": "Create the empty exports consumed by server.ts for T7."
+        },
+        {
+          "path": "lib/credentials.ts",
+          "action": "create",
+          "change": "Read Env Catalog runtime access without persisting it."
+        },
+        {
+          "path": "lib/hierarchy.ts",
+          "action": "create",
+          "change": "Normalize tree, state and spend."
+        },
+        {
+          "path": "lib/log-store.ts",
+          "action": "create",
+          "change": "Bound audit count and UTF-8 bytes."
+        },
+        {
+          "path": "tests/server/api.test.ts",
+          "action": "create",
+          "change": "Exercise registration and manual actions using the public fake host."
+        },
+        {
+          "path": "tests/credentials.test.ts",
+          "action": "create",
+          "change": "Reject missing access with redacted errors."
+        },
+        {
+          "path": "tests/hierarchy.test.ts",
+          "action": "create",
+          "change": "Cover duplicate city projects and spend units."
+        },
+        {
+          "path": "tests/log-store.test.ts",
+          "action": "create",
+          "change": "Cover count/byte limits and sanitization."
+        }
+      ],
+      "appetite": {
+        "minutes": 60
+      }
+    },
+    {
+      "schema_version": 2,
+      "id": "T4",
+      "title": "Ручное управление городскими проектами в BB",
+      "display_title": "Ручное управление городскими проектами в BB",
+      "kind": "feature",
+      "quality_mode": "full",
+      "risk": "high",
+      "lane": "writer",
+      "project_cwd": "/Users/vechkasov/Documents/BB-сервис/plugins/magicseo",
+      "covers": [
+        "D1",
+        "D6",
+        "D7"
+      ],
+      "read_first": [
+        ".agents/phases/ph_f16b2b8b06/CONTEXT.md",
+        ".agents/phases/ph_f16b2b8b06/SECURITY.md",
+        "package.json",
+        "tsconfig.json",
+        "server.ts",
+        "server/api.ts",
+        "server/context.ts",
+        "lib/hierarchy.ts",
+        ".agents/phases/ph_f16b2b8b06/contracts-v2/ui.contract.test.tsx",
+        ".agents/phases/ph_f16b2b8b06/contracts-v2/vitest.config.mjs",
+        ".agents/phases/ph_f16b2b8b06/references/docs/DESIGN.md.txt",
+        ".agents/phases/ph_f16b2b8b06/references/docs/design/pokecut-plugin.css.txt",
+        ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-repo-pulse/app.tsx.txt",
+        ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-repo-pulse/i18n.ts.txt",
+        ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-repo-pulse/components.json.txt",
+        ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-repo-pulse/components/ui/button.tsx.txt",
+        ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-repo-pulse/tests/app.test.tsx.txt",
+        ".agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs"
+      ],
+      "owns_paths": [
+        "package.json",
+        "components.json",
+        "components/**",
+        "lib/utils.ts",
+        "app.tsx",
+        "app.css",
+        "ui/i18n.ts",
+        "ui/projects.tsx",
+        "ui/automation-tab.tsx",
+        "ui/positions-tab.tsx",
+        "tests/ui/projects.test.tsx"
+      ],
+      "never_touch": [
+        ".env*",
+        ".bb/**",
+        ".agents/**",
+        "AGENTS.md",
+        ".gitignore",
+        "tests/magicseo/**",
+        "tests/config.test.ts",
+        "tests/concerts/**",
+        "tests/cities/**"
+      ],
+      "expected_outputs": [
+        "package.json",
+        "components.json",
+        "components/ui/button.tsx",
+        "components/ui/table.tsx",
+        "components/ui/input.tsx",
+        "components/ui/switch.tsx",
+        "components/ui/alert-dialog.tsx",
+        "lib/utils.ts",
+        "app.tsx",
+        "app.css",
+        "ui/i18n.ts",
+        "ui/projects.tsx",
+        "ui/automation-tab.tsx",
+        "ui/positions-tab.tsx",
+        "tests/ui/projects.test.tsx"
+      ],
+      "interfaces": [
+        "app.tsx exports definePluginApp with one MagicSEO navPanel. ui/projects.tsx exports ProjectsPanel. ui/automation-tab.tsx exports AutomationTab; ui/positions-tab.tsx exports PositionsTab. app.tsx imports all three. Shell tab testids: tab-projects, tab-automation, tab-positions.",
+        "RPC calls exactly match T3 input objects. project_keywords returns normalized {id,text,pcPosition,mobilePosition,foundUrl} rows; show 101 as 100+. Testids project-expand-<id>, project-start-<id>, project-stop-<id>, project-check-<id> target the project id, not a catalog item id.",
+        "ui/i18n.ts owns shell+Projects strings and locale helper; T6/T7 keep their own dictionaries. English default, ru* chooses Russian, ru satisfies Record<keyof typeof en,string>. Native @bb registry components, ms- class prefix, --pk-* tokens with BB fallbacks; no custom hex/status palette."
+      ],
+      "invariants": [
+        "Pure lib modules use node: built-ins, type-only SDK imports and relative .ts imports; Node 26 runs their contracts without a transpiler.",
+        "SECURITY.md: fake credentials may be used in tests; credential values and JWTs are excluded from files, KV, errors, audit entries and browser responses.",
+        "Only server RPC receives credential-bearing data; UI receives normalized values and error codes. No credential form or browser token storage.",
+        "Readback refresh follows a completed manual mutation; error notifications contain localized codes, not raw MagicSEO body.",
+        "Paid check and one-off job have distinct labels from read-only history; autolaunch editors display existing values and do not invent new-project settings."
+      ],
+      "out_of_scope": [
+        "Automation decisions/editor and position-history harvesting; new-project parameter defaults."
+      ],
+      "depends_on": [
+        "T3"
+      ],
+      "objective": "Deliver a Projects screen over T3 API: site -> city project -> keywords/positions, account balance, spend, and manual start/stop, one-off job, autolaunch settings and paid position check. Build one shell navigation with Projects, Automation and Positions slots; the last two initially render localized pending states and are replaced by T6/T7 without editing the shell.",
+      "acceptance": [
+        "`node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T4` exits 0 and prints `PASS T4`; the SDK UI contract mounts the real navPanel in en and ru, expands project 5, displays its keyword and 100+, and clicks Start to record project_start({id:5}).",
+        "`node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T4` exits 0 and prints `PASS T4`; owned UI tests route Stop, one-off job, autolaunch save and Check positions to distinct RPC methods, show service errors and empty data, and assert equal EN/RU keys. SECURITY.md: an RPC error containing fake-secret-marker displays exactly 'Unable to load projects' and excludes the marker from the DOM."
+      ],
+      "verify": "tests",
+      "verification": [
+        {
+          "command": "node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T4",
+          "cwd": "."
+        }
+      ],
+      "files": [
+        {
+          "path": "package.json",
+          "action": "modify",
+          "change": "Add ./app.tsx to the existing plugin manifest."
+        },
+        {
+          "path": "components.json",
+          "action": "create",
+          "change": "Configure @/ and the BB registry."
+        },
+        {
+          "path": "components/ui/button.tsx",
+          "action": "create",
+          "change": "Vendor the native control and matching dependencies."
+        },
+        {
+          "path": "components/ui/table.tsx",
+          "action": "create",
+          "change": "Vendor the native data table."
+        },
+        {
+          "path": "components/ui/input.tsx",
+          "action": "create",
+          "change": "Vendor the native input."
+        },
+        {
+          "path": "components/ui/switch.tsx",
+          "action": "create",
+          "change": "Vendor the native switch."
+        },
+        {
+          "path": "components/ui/alert-dialog.tsx",
+          "action": "create",
+          "change": "Vendor the confirmation dialog shared by later tabs."
+        },
+        {
+          "path": "lib/utils.ts",
+          "action": "create",
+          "change": "Use the reference utility for registry controls."
+        },
+        {
+          "path": "app.tsx",
+          "action": "create",
+          "change": "Wire the three slots and localized navigation."
+        },
+        {
+          "path": "app.css",
+          "action": "create",
+          "change": "Apply the parent design kit including narrow layout."
+        },
+        {
+          "path": "ui/i18n.ts",
+          "action": "create",
+          "change": "Provide typed EN/RU strings and locale detection."
+        },
+        {
+          "path": "ui/projects.tsx",
+          "action": "create",
+          "change": "Render hierarchy and manual mutation controls over RPC."
+        },
+        {
+          "path": "ui/automation-tab.tsx",
+          "action": "create",
+          "change": "Create the localized extension slot for T6."
+        },
+        {
+          "path": "ui/positions-tab.tsx",
+          "action": "create",
+          "change": "Create the localized extension slot for T7."
+        },
+        {
+          "path": "tests/ui/projects.test.tsx",
+          "action": "create",
+          "change": "Exercise manual RPC actions, empty/error states and locales."
+        }
+      ],
+      "appetite": {
+        "minutes": 60
+      },
+      "qa_cases": [
+        "[UI-observable] W3: In live BB open MagicSEO -> Projects. Expand a site and a city project; see keyword, desktop/mobile positions, ruble spend and balance. Start/Stop/One-off run/Autolaunch/Check positions are separate controls. Use fixture RPC for mutations; live account checks remain read-only.",
+        "[UI-observable] W3: In Pokecut light/dark and Default light/dark, at 390px and 1200px, in en and ru, visible controls have labels and keyboard focus; document.scrollWidth <= innerWidth. Verify empty list and RPC-error states. Build/reload in the integration gate before the browser check."
+      ],
+      "qa_url": "https://vechkasov.getbb.app/",
+      "qa_env_class": "production"
+    },
+    {
+      "schema_version": 2,
+      "id": "T5",
+      "title": "Правила запуска и остановки за 48 часов",
+      "display_title": "Правила запуска и остановки за 48 часов",
+      "kind": "feature",
+      "quality_mode": "full",
+      "risk": "critical",
+      "lane": "writer",
+      "project_cwd": "/Users/vechkasov/Documents/BB-сервис/plugins/magicseo",
+      "covers": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D6",
+        "D8"
+      ],
+      "read_first": [
+        ".agents/phases/ph_f16b2b8b06/CONTEXT.md",
+        ".agents/phases/ph_f16b2b8b06/SECURITY.md",
+        ".agents/plans/magicseo-api/api-map.md",
+        ".agents/plans/magicseo-api/endpoints.json",
+        ".agents/plans/magicseo-api/bundle-notes.md",
+        ".agents/plans/magicseo-api/shapes.md",
+        "lib/config.ts",
+        "lib/concerts/wordpress.ts",
+        "lib/cities/index.ts",
+        "lib/magicseo/client.ts",
+        "lib/magicseo/lifecycle.ts",
+        ".agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs"
+      ],
+      "owns_paths": [
+        "lib/automation/**",
+        "tests/automation/**"
+      ],
+      "never_touch": [
+        ".env*",
+        ".bb/**",
+        ".agents/**",
+        "AGENTS.md",
+        ".gitignore",
+        "tests/magicseo/**",
+        "tests/config.test.ts",
+        "tests/concerts/**",
+        "tests/cities/**"
+      ],
+      "expected_outputs": [
+        "lib/automation/planner.ts",
+        "lib/automation/keywords.ts",
+        "lib/automation/executor.ts",
+        "lib/automation/run.ts",
+        "tests/automation/planner.test.ts",
+        "tests/automation/keywords.test.ts",
+        "tests/automation/executor.test.ts"
+      ],
+      "interfaces": [
+        "planSite({site,concerts,projects,now}):Action[]. CityProject={id,name,domain,region,active}; Action={kind:'create'|'start'|'stop'|'skip',city,region,projectId,reason,nearestStartUtc,name?,keywords?}. Group only exact normalized site domain+resolved region; duplicate matches => skip reason duplicate_city_project.",
+        "For ordinary concerts, only status publish plus a nonempty link count. Nearest start strictly after now decides: >48h => create/start; <=48h => stop; once that concert starts, the next future concert decides. Exactly 48h is stop. Unknown city => unmapped_city. A city with sold-out/postponed concert is skip special_event_policy_pending until owner policy exists; no guessed policy.",
+        "renderKeywords(templates,{gorod,vGorode}):string[] replaces %город% and %в_городе%, deduplicates in input order. CSV serializer uses a single quoted/escaped UTF-8 column; compare GET keywords/import_pattern before live upload; unrecognized layout => blocked keyword_import_format_unverified rather than an inferred header.",
+        "executeActions(actions,{client,site,mode,checkpoint?}):Promise<ActionResult[]>; ActionResult={...Action without keywords,mode,outcome:'planned'|'done'|'blocked'|'alert',detail,at,keywordsCount?}. Missing newProject => blocked new_project_settings_missing. In live mode create once, persist returned id/upload stage with checkpoint, upload keywords then enable promotion; never enable after failed upload. runSite({site,client,fetchConcerts,now,mode,checkpoint?}) fetches the complete source snapshot and cabinet project state then plans/executes."
+      ],
+      "invariants": [
+        "Pure lib modules use node: built-ins, type-only SDK imports and relative .ts imports; Node 26 runs their contracts without a transpiler.",
+        "SECURITY.md: fake credentials may be used in tests; credential values and JWTs are excluded from files, KV, errors, audit entries and browser responses.",
+        "D4: no balance read influences planning or execution. Missing/failed source snapshot produces an alert and zero promotion mutations; it cannot mean no concerts.",
+        "Dry-run makes zero mutating client calls; off mode does not run. Complete normal empty feed may stop active managed site/city projects; other domains are excluded.",
+        "Mutation timeout during create is not retried blindly; reconcile domain+region and persisted stage on the next run; uncertain state is blocked. Stop failures use T1 bounded verification and produce an alert."
+      ],
+      "out_of_scope": [
+        "Scheduler and settings UI belong to T6; deferred promotion values, sold-out/postponed behavior and report formats are excluded."
+      ],
+      "depends_on": [
+        "T1",
+        "T2"
+      ],
+      "objective": "Implement deterministic concert-to-city-project planning and a dry-run/live executor, including per-site keyword templates and a resumable create -> upload -> enable workflow. No schedule or UI in this module. Exercise side effects with fake clients only.",
+      "acceptance": [
+        "`node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T5` exits 0 and prints `PASS T5`; planner assertions cover 49h start, 48h/47h stop, a later concert after the first starts, create when missing, draft/empty-link exclusion, ambiguous project and city rejection, and special-event policy pending.",
+        "`node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T5` exits 0 and prints `PASS T5`; keyword expansion yields exactly [\"x Воткинск\",\"y в Воткинске\"]; dry-run has zero mutations and missing live project settings returns new_project_settings_missing. Owned tests exercise CSV quoting, failed upload, timeout reconciliation, balance independence, source failure and stop alerts. SECURITY.md: executor results carry counts/reasons, excluding authentication values and upstream bodies."
+      ],
+      "verify": "tests",
+      "verification": [
+        {
+          "command": "node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T5",
+          "cwd": "."
+        }
+      ],
+      "files": [
+        {
+          "path": "lib/automation/planner.ts",
+          "action": "create",
+          "change": "Compute city actions using explicit now and city time."
+        },
+        {
+          "path": "lib/automation/keywords.ts",
+          "action": "create",
+          "change": "Expand both placeholders, deduplicate and serialize the verified import shape."
+        },
+        {
+          "path": "lib/automation/executor.ts",
+          "action": "create",
+          "change": "Execute dry-run/live with checkpoints and bounded lifecycle calls."
+        },
+        {
+          "path": "lib/automation/run.ts",
+          "action": "create",
+          "change": "Read complete source/project snapshots and delegate planning/execution."
+        },
+        {
+          "path": "tests/automation/planner.test.ts",
+          "action": "create",
+          "change": "Cover boundary, multiple concerts, domain and duplicate mapping cases."
+        },
+        {
+          "path": "tests/automation/keywords.test.ts",
+          "action": "create",
+          "change": "Cover both placeholders, escaping and import-pattern rejection."
+        },
+        {
+          "path": "tests/automation/executor.test.ts",
+          "action": "create",
+          "change": "Cover partial creation, retries, source errors, audit and balance independence."
+        }
+      ],
+      "appetite": {
+        "minutes": 60
+      }
+    },
+    {
+      "schema_version": 2,
+      "id": "T6",
+      "title": "Настройки сайтов и автоматизация с предпросмотром",
+      "display_title": "Настройки сайтов и автоматизация с предпросмотром",
+      "kind": "feature",
+      "quality_mode": "full",
+      "risk": "critical",
+      "lane": "writer",
+      "project_cwd": "/Users/vechkasov/Documents/BB-сервис/plugins/magicseo",
+      "covers": [
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+        "D8"
+      ],
+      "read_first": [
+        ".agents/phases/ph_f16b2b8b06/CONTEXT.md",
+        ".agents/phases/ph_f16b2b8b06/SECURITY.md",
+        "server.ts",
+        "server/context.ts",
+        "server/automation.ts",
+        "server/api.ts",
+        "lib/log-store.ts",
+        "lib/credentials.ts",
+        "lib/config.ts",
+        "lib/concerts/wordpress.ts",
+        "lib/automation/run.ts",
+        "lib/automation/planner.ts",
+        "lib/automation/executor.ts",
+        "app.tsx",
+        "app.css",
+        "ui/i18n.ts",
+        "ui/automation-tab.tsx",
+        ".agents/phases/ph_f16b2b8b06/contracts-v2/ui.contract.test.tsx",
+        ".agents/phases/ph_f16b2b8b06/contracts-v2/vitest.config.mjs",
+        ".agents/phases/ph_f16b2b8b06/references/docs/DESIGN.md.txt",
+        ".agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs"
+      ],
+      "owns_paths": [
+        "server/automation.ts",
+        "server/automation-handlers.ts",
+        "ui/automation-tab.tsx",
+        "ui/automation-tab.css",
+        "ui/automation-i18n.ts",
+        "tests/server/automation.test.ts",
+        "tests/ui/automation.test.tsx"
+      ],
+      "never_touch": [
+        ".env*",
+        ".bb/**",
+        ".agents/**",
+        "AGENTS.md",
+        ".gitignore",
+        "tests/magicseo/**",
+        "tests/config.test.ts",
+        "tests/concerts/**",
+        "tests/cities/**",
+        "server.ts",
+        "server/context.ts",
+        "server/api.ts",
+        "app.tsx",
+        "app.css",
+        "ui/i18n.ts",
+        "ui/projects.tsx",
+        "package.json",
+        "package-lock.json",
+        "tsconfig.json",
+        "components/**",
+        "lib/magicseo/**",
+        "lib/config.ts",
+        "lib/concerts/**",
+        "lib/cities/**",
+        "lib/automation/**",
+        "tests/automation/**",
+        "lib/positions/**",
+        "server/positions.ts",
+        "server/positions-handlers.ts",
+        "ui/positions-tab.tsx",
+        "ui/positions-tab.css",
+        "ui/positions-i18n.ts",
+        "tests/positions/**",
+        "tests/server/positions.test.ts",
+        "tests/ui/positions.test.tsx"
+      ],
+      "expected_outputs": [
+        "server/automation.ts",
+        "server/automation-handlers.ts",
+        "ui/automation-tab.tsx",
+        "ui/automation-tab.css",
+        "ui/automation-i18n.ts",
+        "tests/server/automation.test.ts",
+        "tests/ui/automation.test.tsx"
+      ],
+      "interfaces": [
+        "createAutomationHandlers({getConfig,saveConfig,kv,client,fetchConcerts,now}) exports automation_preview({siteId}):ActionResult[], automation_save_site({site}):SiteConfig, automation_set_mode({siteId,mode,confirmed}):{mode}, automation_log({siteId}):ActionResult[], automation_run_now({siteId}). Revalidate config and live confirmation server-side. automation_save_site cannot change mode to live; use automation_set_mode with confirmed:true for that transition.",
+        "server/automation.ts fills T3 adapter contracts and handlers, registers minute cron via bb.background.schedule, registers startup reconciliation and disposal through public SDK. Each due site uses runSite; due metadata/checkpoints are KV namespaced by site. Serialize runs per site; manual and scheduled runs share that lock.",
+        "Store lifecycle-log:<siteId> <=200 entries, no keyword arrays or upstream bodies, UTF-8 JSON <262144 bytes. Persistent checkpoint records project id and upload/enable phase, never credentials. Persist alerts for failed stop attempts and expose them in this tab.",
+        "UI testids automation-preview, automation-live; tab renders preview city/action/reason/nearest-start with city timezone. Live opens alertdialog before automation_set_mode RPC; cancellation sends no mode change. The editable keyword templates preview both placeholders. New-project promotion values and special-event policy have no default controls in this phase."
+      ],
+      "invariants": [
+        "Pure lib modules use node: built-ins, type-only SDK imports and relative .ts imports; Node 26 runs their contracts without a transpiler.",
+        "SECURITY.md: fake credentials may be used in tests; credential values and JWTs are excluded from files, KV, errors, audit entries and browser responses.",
+        "Preview forces dry-run regardless of stored mode. New sites use dry-run. Live confirmation is validated at the RPC boundary.",
+        "Scheduler evaluates due cities each minute; it must not wait a 30-minute poll interval across a known 48-hour deadline. Stop failure retries and alert are recorded. Failed concert fetch alerts without changing promotion.",
+        "EN/RU typed dictionaries, Pokecut tokens and native shared controls. UI/config/KV/logs contain secret names only; load optional ATMOSPHERE_WP_APP through T3 loadLogin when a configured source requires it."
+      ],
+      "out_of_scope": [
+        "Choosing promotion settings; implementing sold-out/postponed rules; sending external notifications; reading/writing unrelated site data."
+      ],
+      "depends_on": [
+        "T3",
+        "T4",
+        "T5"
+      ],
+      "objective": "Connect T5 to the Automation tab and a BB background schedule. Let the owner add/edit sites, keyword templates, city aliases/region/timezone overrides, preview decisions and inspect lifecycle/stop-failure alerts. Default to dry-run and require an explicit confirmation to switch live; keep missing promotion settings and special-event policy visible as blocked reasons.",
+      "acceptance": [
+        "`node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T6` exits 0 and prints `PASS T6`; the handler fake previews with zero mutations, rejects live without confirmed:true, persists edited keyword templates and bounds lifecycle logs to 200 records without keyword arrays. SECURITY.md: site settings reject a credential value field. A site-save request that changes dry-run to live also rejects.",
+        "`node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T6` exits 0 and prints `PASS T6`; the real app Automation tab renders Within 48 hours after Preview and opens an alertdialog for Live before sending any mode-change RPC. Owned SDK schedule tests advance the clock from 49h to exactly 48h, drive tick/reload and assert one stop, serialized overlap and a persisted stop-failure alert. SECURITY.md: an RPC error containing fake-secret-marker displays exactly 'Unable to preview automation' and excludes the marker from the DOM."
+      ],
+      "verify": "tests",
+      "verification": [
+        {
+          "command": "node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T6",
+          "cwd": "."
+        }
+      ],
+      "files": [
+        {
+          "path": "server/automation.ts",
+          "action": "modify",
+          "change": "Register typed Automation methods and minute reconciliation with disposal."
+        },
+        {
+          "path": "server/automation-handlers.ts",
+          "action": "create",
+          "change": "Implement preview/settings/live confirmation/log/run with per-site serialization and checkpoints."
+        },
+        {
+          "path": "ui/automation-tab.tsx",
+          "action": "modify",
+          "change": "Replace the extension slot with settings, template preview, decision list and alerts."
+        },
+        {
+          "path": "ui/automation-tab.css",
+          "action": "create",
+          "change": "Use shared ms- Pokecut tokens and responsive form/table layout."
+        },
+        {
+          "path": "ui/automation-i18n.ts",
+          "action": "create",
+          "change": "Provide EN/RU field, reason and error labels."
+        },
+        {
+          "path": "tests/server/automation.test.ts",
+          "action": "create",
+          "change": "Drive minute ticks, boundary stops, source failure, reload and overlap."
+        },
+        {
+          "path": "tests/ui/automation.test.tsx",
+          "action": "create",
+          "change": "Edit templates and a second site, preview and confirm/cancel live mode."
+        }
+      ],
+      "appetite": {
+        "minutes": 60
+      },
+      "qa_cases": [
+        "[UI-observable] W4: Open MagicSEO -> Automation. Edit keyword templates, add a second site with a different domain/source and region/timezone overrides, save and reopen: both sites appear. Preview shows the expanded city keywords, local concert time, action and reason. Existing dry-run shows zero paid changes.",
+        "[UI-observable] W4: Live opens a confirmation; cancel preserves Dry-run. A missing project template displays the localized Project settings required reason; a simulated failed stop displays an alert. Check en/ru, 390px/1200px and Pokecut/Default light/dark; scrollWidth <= innerWidth. Mutations use fixture RPC."
+      ],
+      "qa_url": "https://vechkasov.getbb.app/",
+      "qa_env_class": "production"
+    },
+    {
+      "schema_version": 2,
+      "id": "T7",
+      "title": "История позиций по сайтам, городам и ключам",
+      "display_title": "История позиций по сайтам, городам и ключам",
+      "kind": "feature",
+      "quality_mode": "full",
+      "risk": "medium",
+      "lane": "writer",
+      "project_cwd": "/Users/vechkasov/Documents/BB-сервис/plugins/magicseo",
+      "covers": [
+        "D1",
+        "D6",
+        "D7"
+      ],
+      "read_first": [
+        ".agents/phases/ph_f16b2b8b06/CONTEXT.md",
+        ".agents/phases/ph_f16b2b8b06/SECURITY.md",
+        ".agents/plans/magicseo-api/api-map.md",
+        ".agents/plans/magicseo-api/endpoints.json",
+        ".agents/plans/magicseo-api/bundle-notes.md",
+        ".agents/plans/magicseo-api/shapes.md",
+        "server.ts",
+        "server/context.ts",
+        "server/positions.ts",
+        "lib/magicseo/client.ts",
+        "lib/config.ts",
+        "lib/cities/index.ts",
+        "app.tsx",
+        "app.css",
+        "ui/i18n.ts",
+        "ui/positions-tab.tsx",
+        ".agents/phases/ph_f16b2b8b06/contracts-v2/ui.contract.test.tsx",
+        ".agents/phases/ph_f16b2b8b06/contracts-v2/vitest.config.mjs",
+        ".agents/phases/ph_f16b2b8b06/references/docs/DESIGN.md.txt",
+        ".agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs"
+      ],
+      "owns_paths": [
+        "lib/positions/**",
+        "server/positions.ts",
+        "server/positions-handlers.ts",
+        "ui/positions-tab.tsx",
+        "ui/positions-tab.css",
+        "ui/positions-i18n.ts",
+        "tests/positions/**",
+        "tests/server/positions.test.ts",
+        "tests/ui/positions.test.tsx"
+      ],
+      "never_touch": [
+        ".env*",
+        ".bb/**",
+        ".agents/**",
+        "AGENTS.md",
+        ".gitignore",
+        "tests/magicseo/**",
+        "tests/config.test.ts",
+        "tests/concerts/**",
+        "tests/cities/**",
+        "server.ts",
+        "server/context.ts",
+        "server/api.ts",
+        "app.tsx",
+        "app.css",
+        "ui/i18n.ts",
+        "ui/projects.tsx",
+        "package.json",
+        "package-lock.json",
+        "tsconfig.json",
+        "components/**",
+        "lib/magicseo/**",
+        "lib/config.ts",
+        "lib/concerts/**",
+        "lib/cities/**",
+        "lib/automation/**",
+        "tests/automation/**",
+        "server/automation.ts",
+        "server/automation-handlers.ts",
+        "ui/automation-tab.tsx",
+        "ui/automation-tab.css",
+        "ui/automation-i18n.ts",
+        "tests/server/automation.test.ts",
+        "tests/ui/automation.test.tsx"
+      ],
+      "expected_outputs": [
+        "lib/positions/harvest.ts",
+        "lib/positions/report.ts",
+        "server/positions.ts",
+        "server/positions-handlers.ts",
+        "ui/positions-tab.tsx",
+        "ui/positions-tab.css",
+        "ui/positions-i18n.ts",
+        "tests/positions/harvest.test.ts",
+        "tests/positions/report.test.ts",
+        "tests/server/positions.test.ts",
+        "tests/ui/positions.test.tsx"
+      ],
+      "interfaces": [
+        "harvest({client,kv,projects,today,pauseMs?}):Promise<{projects,checks}> uses GET positions only; first from=today minus 30 days, subsequent from=last successful date including that day. Follow pagination. Merge by project+keyword_id+provider+check time; pc/mobile and raw 101 are preserved. Mark lastDate only after durable write of all pages.",
+        "Store position pages under pos:<projectId>:<YYYY-MM>:<shard> with an index and pos-meta:<projectId>. Split by UTF-8 byte length (target <=200KiB, mandatory <262144 bytes), not by a fixed keyword count. Repeated harvest upserts the same check. Project and provider are part of storage identity.",
+        "reportRows(kv,projects,{domain,region?,keyword?,from,to}):Promise<ReportRow[]>; ReportRow={site,city,keyword,date,pcPosition,mobilePosition,foundUrl,provider?}. City uses cityByRegion. positions_report(filter), positions_harvest_now() RPC via createPositionsHandlers; T3 registerPositions schedules six-hour GET harvests using a minute due tick and persists due metadata.",
+        "PositionsTab replaces T4 slot; testid positions-harvest triggers positions_harvest_now only. Display 101 as 100+ and null as a localized missing value, with last successful harvest timestamp and error state. Per-tab typed EN/RU dictionary and shared native controls."
+      ],
+      "invariants": [
+        "Pure lib modules use node: built-ins, type-only SDK imports and relative .ts imports; Node 26 runs their contracts without a transpiler.",
+        "SECURITY.md: fake credentials may be used in tests; credential values and JWTs are excluded from files, KV, errors, audit entries and browser responses.",
+        "No manual positions_job call in harvesting. Zero mutation methods or credential access from the UI. Errors/logs exclude raw upstream records with authentication data.",
+        "A failed page cannot advance lastDate or drop stored checks. No retention deletion is introduced.",
+        "Table/JSON rows are the internal history view; CSV, Excel/PDF, public links, recipients and delivery remain deferred."
+      ],
+      "out_of_scope": [
+        "Selecting report/export format, CSV/Excel/PDF/public reports and recipients; paid position checks; changing concert automation."
+      ],
+      "depends_on": [
+        "T1",
+        "T2",
+        "T3",
+        "T4"
+      ],
+      "objective": "Harvest existing MagicSEO position history on a six-hour schedule and expose a Positions table filtered by site, city, keyword and date range. This is read-only collection, separate from the paid check button. Provide internal JSON rows for future reporting; leave export format and recipients deferred.",
+      "acceptance": [
+        "`node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T7` exits 0 and prints `PASS T7`; two fixture harvests yield one row with pcPosition 101 and city Москва, another-domain filter yields zero rows, first from is 2027-01-01 for today 2027-01-31, and 2000 Cyrillic keywords x 31 days fit into byte-bounded KV shards.",
+        "`node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T7` exits 0 and prints `PASS T7`; the real app Positions tab renders 100+ and Harvest invokes positions_harvest_now without positions_check. Owned tests cover provider identity, all filters, pagination failure, schedule reload and failed-write watermark retention. SECURITY.md: an RPC error containing fake-secret-marker displays exactly 'Unable to load positions' and excludes the marker from the DOM."
+      ],
+      "verify": "tests",
+      "verification": [
+        {
+          "command": "node .agents/phases/ph_f16b2b8b06/contracts-v2/check.mjs T7",
+          "cwd": "."
+        }
+      ],
+      "files": [
+        {
+          "path": "lib/positions/harvest.ts",
+          "action": "create",
+          "change": "Read, paginate, deduplicate and byte-shard history."
+        },
+        {
+          "path": "lib/positions/report.ts",
+          "action": "create",
+          "change": "Filter internal rows by site/city/keyword/date."
+        },
+        {
+          "path": "server/positions.ts",
+          "action": "modify",
+          "change": "Register table/history RPC and six-hour read-only harvesting."
+        },
+        {
+          "path": "server/positions-handlers.ts",
+          "action": "create",
+          "change": "Validate filters and expose harvest/read errors and timestamps."
+        },
+        {
+          "path": "ui/positions-tab.tsx",
+          "action": "modify",
+          "change": "Render filtered history, loading/error states and read-only Harvest."
+        },
+        {
+          "path": "ui/positions-tab.css",
+          "action": "create",
+          "change": "Use the parent Pokecut table and narrow-layout tokens."
+        },
+        {
+          "path": "ui/positions-i18n.ts",
+          "action": "create",
+          "change": "Provide typed EN/RU labels and error strings."
+        },
+        {
+          "path": "tests/positions/harvest.test.ts",
+          "action": "create",
+          "change": "Cover byte-sized shards, pagination, duplicate checks and failed-write watermark."
+        },
+        {
+          "path": "tests/positions/report.test.ts",
+          "action": "create",
+          "change": "Cover site, city, keyword, provider and dates."
+        },
+        {
+          "path": "tests/server/positions.test.ts",
+          "action": "create",
+          "change": "Drive due tick and reload through the SDK fake host."
+        },
+        {
+          "path": "tests/ui/positions.test.tsx",
+          "action": "create",
+          "change": "Drive filters, Harvest, null/101, locales and error states."
+        }
+      ],
+      "appetite": {
+        "minutes": 60
+      },
+      "qa_cases": [
+        "[UI-observable] W4: Open MagicSEO -> Positions. Select a site, city, keyword and date range, observe matching rows and 100+ for raw 101. Press Harvest: last successful timestamp updates and positions_check is absent from RPC calls. With a simulated failed harvest, existing history and a localized error are visible.",
+        "[UI-observable] W4: Exercise empty history and null positions in en/ru at 390px/1200px, Pokecut/Default light/dark. The table can scroll inside its container; document.scrollWidth <= innerWidth. No export format or recipient is presented."
+      ],
+      "qa_url": "https://vechkasov.getbb.app/",
+      "qa_env_class": "production"
+    }
+  ],
+  "waves": [
+    [
+      "T1",
+      "T2"
+    ],
+    [
+      "T3",
+      "T5"
+    ],
+    [
+      "T4"
+    ],
+    [
+      "T6",
+      "T7"
+    ]
+  ],
+  "objective": "Build a MagicSEO API service in the authenticated BB plugin backend and an EN/RU plugin for site -> city projects -> keywords/positions, manual controls, per-site concert automation with the fixed city-local 48-hour stop rule and keyword templates, and scheduled read-only position history. Preserve D1-D8; defer promotion parameter values, special-event policy and external report formats/recipients.",
+  "has_ui": true,
+  "task_count": 7,
+  "confidence": 84,
+  "already_met": false,
+  "handoff": "Revised .agents/plans/magicseo-task-v2.json for all five read_first gaps. External pattern files were copied byte-for-byte into .agents/phases/ph_f16b2b8b06/references/ with SHA-256 provenance in references/manifest.json; every read_first is now project-relative without parent traversal. Seven implementation tasks, D1-D8 coverage and four waves are retained. Planning notes and immutable checks remain under the phase; existing PLAN.md and plan.json are preserved. Structure, snapshots, local task-v2 core schema and all seven red base checks were verified. No implementation, live UI test, commit, push or account mutation was performed. Deferred promotion values, special-event policy and report formats/recipients stay excluded; password rotation, controlled live lifecycle/import-format validation and integration/release remain outstanding. The local dispatch schema does not list caller-required covers: retain that metadata at the workflow boundary."
+}

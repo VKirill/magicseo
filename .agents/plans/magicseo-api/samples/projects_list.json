@@ -1,0 +1,25 @@
+{
+ "projects": [
+  {
+   "id": 445647,
+   "item_id": 19421,
+   "name": "<name>",
+   "domain": "https://example.com/path",
+   "parent_id": 219
+  },
+  {
+   "id": 445650,
+   "item_id": 14448,
+   "name": "<name>",
+   "domain": "https://example.com/path",
+   "parent_id": 219
+  },
+  {
+   "id": 438150,
+   "item_id": 23507,
+   "name": "<name>",
+   "domain": "https://example.com/path",
+   "parent_id": 219
+  }
+ ]
+}

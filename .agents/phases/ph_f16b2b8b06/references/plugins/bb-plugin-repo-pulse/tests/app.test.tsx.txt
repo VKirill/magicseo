@@ -1,0 +1,276 @@
+// @vitest-environment jsdom
+import { it, expect, vi } from "vitest";
+import { fireEvent } from "@testing-library/react";
+import { loadPluginApp, renderSlot } from "@get-bb/plugin-sdk/testing/app";
+import { configSchema } from "../core";
+import { toast } from "sonner";
+import { ru } from "../messages";
+it("renders Russian analysis-first BB and blocks bulk dispatch in launch preview", async () => {
+  document.documentElement.lang = "en";
+  document.documentElement.setAttribute("data-pk-lang", "ru");
+  const app = await loadPluginApp(() => import("../app"));
+  const slot = renderSlot(
+    app.navPanels[0],
+    { subPath: "" },
+    {
+      rpc: {
+        list: () => ({
+          items: [],
+          count: 0,
+          lastCheck: null,
+          errors: [],
+          authenticated: true,
+          remaining: 100,
+        }),
+        config: () => configSchema.parse({}),
+        routes: () => ({ sections: [], routes: [] }),
+      },
+    },
+  );
+  try {
+    const batch = await slot.findByRole("button", { name: ru.batch });
+    expect((batch as HTMLButtonElement).disabled).toBe(false);
+    expect(slot.getByRole("heading", { name: ru.title })).toBeTruthy();
+    expect(slot.queryByRole("switch", { name: ru.reportOnly })).toBeNull();
+    expect(slot.getByText(ru.analysisHint)).toBeTruthy();
+    fireEvent.click(slot.getByRole("switch", { name: ru.dryMode }));
+    expect((batch as HTMLButtonElement).disabled).toBe(true);
+    expect(
+      slot.inspection.rpcCalls.some((call: any) => call.method === "batch"),
+    ).toBe(false);
+  } finally {
+    slot.lifecycle.unmount();
+    document.documentElement.removeAttribute("data-pk-lang");
+  }
+});
+
+it("uses the Russian dictionary for BB realtime notifications", async () => {
+  document.documentElement.lang = "en";
+  document.documentElement.setAttribute("data-pk-lang", "ru");
+  const app = await loadPluginApp(() => import("../app"));
+  const spy = vi.spyOn(toast, "info");
+  const slot = renderSlot(app.appOverlays[0], {});
+  try {
+    await slot.behavior.emitRealtime("new-items", { count: 2 });
+    expect(spy).toHaveBeenCalledWith(`${ru.notification}: 2`);
+  } finally {
+    slot.lifecycle.unmount();
+    spy.mockRestore();
+    document.documentElement.removeAttribute("data-pk-lang");
+  }
+});
+
+it("keeps calm marketplace/bot/disabled groups out of attention and reveals section chooser only on demand", async () => {
+  document.documentElement.lang = "ru-RU";
+  const app = await loadPluginApp(() => import("../app"));
+  const base = {
+    number: 1,
+    title: "A request",
+    author: "VKirill",
+    url: "https://github.com/get-bb/marketplace/pull/1",
+    updated: "2026-10-16",
+    fingerprint: "one",
+    closed: false,
+  };
+  const slot = renderSlot(
+    app.navPanels[0],
+    { subPath: "" },
+    {
+      rpc: {
+        list: () => ({
+          items: [
+            {
+              ...base,
+              id: "market",
+              repo: "VKirill/plugin",
+              kind: "marketplace",
+              status: "marketplace_waiting",
+            },
+            {
+              ...base,
+              id: "gate",
+              repo: "VKirill/gate",
+              kind: "marketplace",
+              status: "maintainer_waiting",
+              reason: "maintainerLabel",
+            },
+            {
+              ...base,
+              id: "bot",
+              repo: "VKirill/bots",
+              kind: "pr",
+              author: "dependabot[bot]",
+              bot: true,
+              status: "new",
+            },
+            {
+              ...base,
+              id: "disabled",
+              repo: "VKirill/agency",
+              kind: "ci",
+              ignored: true,
+              status: "waiting",
+            },
+          ],
+          count: 0,
+          lastCheck: null,
+          errors: [],
+          authenticated: true,
+          remaining: 10,
+        }),
+        config: () => configSchema.parse({}),
+        routes: () => ({
+          sections: [],
+          routes: [
+            {
+              repo: "VKirill/plugin",
+              projectId: "p",
+              hostId: "h",
+              checkoutPath: "/work/plugin",
+              folderId: "f",
+              label: "Плагины / plugin",
+              status: "ready",
+            },
+          ],
+        }),
+      },
+    },
+  );
+  try {
+    await slot.findByText(ru.empty);
+    expect(slot.queryByRole("heading", { name: "VKirill/plugin" })).toBeNull();
+    fireEvent.click(slot.getByRole("button", { name: ru.all }));
+    await slot.findByText(ru.marketplace_waiting);
+    const gateLabel = await slot.findByText(ru.maintainer_waiting);
+    expect(
+      (gateLabel.closest("tr")?.querySelector("button") as HTMLButtonElement)
+        .disabled,
+    ).toBe(true);
+    expect(slot.queryAllByRole("columnheader")).toHaveLength(0);
+    expect(slot.queryAllByRole("combobox")).toHaveLength(0);
+    fireEvent.click(slot.getAllByRole("button", { name: ru.editSection })[0]);
+    expect(slot.getAllByRole("combobox")).toHaveLength(1);
+    fireEvent.click(slot.getByRole("button", { name: ru.bots }));
+    expect(slot.getByRole("heading", { name: "VKirill/bots" })).toBeTruthy();
+    expect(slot.queryByRole("heading", { name: "VKirill/plugin" })).toBeNull();
+  } finally {
+    slot.lifecycle.unmount();
+    document.documentElement.lang = "en";
+  }
+});
+
+it("offers Implement and Decline on a pending analysis and sends the choice to the existing thread", async () => {
+  document.documentElement.lang = "ru-RU";
+  const app = await loadPluginApp(() => import("../app"));
+  const item = {
+    id: "pending",
+    repo: "owner/plugin",
+    kind: "issue",
+    number: 1,
+    author: "helper",
+    title: "Request",
+    url: "https://github.com/owner/plugin/issues/1",
+    updated: "2026-10-16",
+    fingerprint: "one",
+    closed: false,
+    status: "awaiting_decision",
+    threadId: "thr_existing",
+  };
+  const slot = renderSlot(
+    app.navPanels[0],
+    { subPath: "" },
+    {
+      rpc: {
+        list: () => ({
+          items: [item],
+          count: 1,
+          lastCheck: null,
+          errors: [],
+          authenticated: true,
+          remaining: 10,
+        }),
+        config: () => configSchema.parse({}),
+        routes: () => ({ sections: [], routes: [] }),
+        decide: () => ({ threadId: "thr_existing" }),
+      },
+    },
+  );
+  try {
+    await slot.findByText(ru.awaiting_decision);
+    expect(slot.queryByRole("button", { name: ru.run })).toBeNull();
+    expect(slot.getByRole("button", { name: ru.reject })).toBeTruthy();
+    fireEvent.click(slot.getByRole("button", { name: ru.implement }));
+    await new Promise((r) => setTimeout(r, 0));
+    expect(
+      slot.inspection.rpcCalls.some(
+        (c: any) =>
+          c.method === "decide" &&
+          c.input.id === "pending" &&
+          c.input.decision === "implement",
+      ),
+    ).toBe(true);
+  } finally {
+    slot.lifecycle.unmount();
+    document.documentElement.lang = "en";
+  }
+});
+
+it("shows the core hourly budget, hides healthy search, and labels only exhausted search", async () => {
+  document.documentElement.lang = "ru-RU";
+  const app = await loadPluginApp(() => import("../app"));
+  let searchRemaining = 29;
+  const slot = renderSlot(
+    app.navPanels[0],
+    { subPath: "" },
+    {
+      rpc: {
+        list: () => ({
+          items: [],
+          count: 0,
+          lastCheck: "2026-10-17T18:00:00Z",
+          errors: [],
+          authenticated: true,
+          remaining: 4990,
+          limits: {
+            core: { remaining: 4990, limit: 5000, reset: Date.now() + 3600000 },
+            search: {
+              remaining: searchRemaining,
+              limit: 30,
+              reset: Date.now() + 60000,
+            },
+          },
+          nextCheck: "2026-10-18T07:00:00Z",
+          timeZone: "Europe/Madrid",
+        }),
+        config: () => configSchema.parse({}),
+        routes: () => ({ sections: [], routes: [] }),
+      },
+    },
+  );
+  try {
+    const label = await slot.findByText(/Осталось запросов API/);
+    expect(label.textContent?.replace(/[\s\u00a0\u202f]/g, " ")).toContain(
+      "Осталось запросов API: 4 990 из 5 000 в час",
+    );
+    expect(slot.queryByText(/Лимит поиска исчерпан/)).toBeNull();
+    expect(slot.getByTestId("next-check").textContent).toContain(
+      "18.10.2026, 09:00:00 · Europe/Madrid",
+    );
+    searchRemaining = 0;
+    await slot.behavior.emitRealtime("changed", {});
+    expect(await slot.findByText(/Лимит поиска исчерпан до/)).toBeTruthy();
+    fireEvent.click(slot.getByRole("button", { name: ru.settings }));
+    expect(await slot.findByLabelText(ru.scheduleTime)).toHaveProperty(
+      "value",
+      "09:00",
+    );
+    expect(slot.getByLabelText(ru.scheduleTimeZone)).toHaveProperty(
+      "value",
+      "Europe/Madrid",
+    );
+    expect(slot.queryByLabelText(ru.intervalMinutes)).toBeNull();
+  } finally {
+    slot.lifecycle.unmount();
+    document.documentElement.lang = "en";
+  }
+});

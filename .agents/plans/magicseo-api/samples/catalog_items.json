@@ -1,0 +1,76 @@
+{
+ "note": "catalog_items response: {items:[folder{..., children:[project items like below]}]} — truncated sample, one project item shown",
+ "project_item": {
+  "id": 103677,
+  "parent_id": 219,
+  "type": "project",
+  "name": "<str>",
+  "created_at": "2026-09-11T01:08:01.255332+03:00",
+  "children_count": 0,
+  "keywords": {
+   "keywords_count": 23,
+   "test_keywords_count": 0,
+   "keywords_in_promotion": 23,
+   "top_1": 7,
+   "top_3": 8,
+   "top_10": 8,
+   "delta_top_1": 0,
+   "delta_top_3": 0,
+   "delta_top_10": 0,
+   "avg_position": 18.636363636363637,
+   "first_avg_position": 33,
+   "delta_avg_position": 0
+  },
+  "project_info": {
+   "id": 544055,
+   "user_id": 253,
+   "name": "<str>",
+   "domain": "<str>",
+   "region": 213,
+   "external_id": null,
+   "created_at": "2026-09-11T01:08:01.255332+03:00",
+   "deleted_at": null,
+   "expert_mode": false,
+   "separate_balance_enabled": false,
+   "total_spent": 872,
+   "period_spent": 872,
+   "total_money_spent": 79800,
+   "period_money_spent": 79800,
+   "total_positions_money_spent": 0,
+   "period_positions_money_spent": 0,
+   "last_done_counts": 2,
+   "total_done_counts": 872,
+   "period_done_counts": 872,
+   "today_done_counts": 13,
+   "usage_counts": 0,
+   "usage_counts_limits": 9999999,
+   "last_positions_error": "<str>",
+   "active_since": null,
+   "last_job": {
+    "status": 2,
+    "started_at": "2026-10-30T15:37:09.642382+03:00"
+   },
+   "is_valid_region": true,
+   "separate_balance": {
+    "balance": 0,
+    "allocated_balance": 0,
+    "is_low": false,
+    "days_remaining": 0,
+    "demo_balance": 0,
+    "money_balance": 0
+   },
+   "total_monthly_price": 0,
+   "autolaunch_settings": {
+    "project_id": 544055,
+    "user_id": 253,
+    "active": true,
+    "budget": 10000,
+    "error": "<str>",
+    "type": 3,
+    "device": 2,
+    "positions_device": 2,
+    "updated_at": "2026-10-13T17:10:03.729978+03:00"
+   }
+  }
+ }
+}

@@ -1,0 +1,685 @@
+{
+  "objective": "MagicSEO BB plugin in plugins/magicseo: a typed client over the lk.magicseo.ru cabinet API (login from Env Catalog MAGICSEO_LOGIN, every documented read and lifecycle mutation, each mutation logged), a site → city-project tree with manual start/stop/positions check, concert-driven automation per configured client site (first atmosphere-show.ru: create+start a city project when a published concert with a link exists, stop at 48 h before the nearest concert in city time, dry-run by default), and scheduled position harvesting with per site/city/keyword reports and CSV export.",
+  "tasks": [
+    {
+      "schema_version": 2,
+      "id": "T1",
+      "title": "MagicSEO cabinet client: JWT auth, documented endpoints, logged mutations, start/stop with verify",
+      "risk": "high",
+      "lane": "writer",
+      "covers": [
+        "D6",
+        "D7"
+      ],
+      "read_first": [
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/api-map.md",
+        ".agents/plans/magicseo-api/shapes.md",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/endpoints.json",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/bundle-notes.md",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/samples/project_544055.json",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/samples/catalog_items.txt",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/samples/project_544055_autolaunch.json",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/samples/project_544055_keywords_v2.json",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/samples/positions_527041_full_range.json",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/samples/projects_list.json",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/samples/balance_detailed_v2.json",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/samples/billingCounters.json",
+        ".agents/phases/ph_f16b2b8b06/CONTEXT.md",
+        ".agents/phases/ph_f16b2b8b06/SECURITY.md",
+        ".gitignore"
+      ],
+      "owns_paths": [
+        "package.json",
+        "package-lock.json",
+        "tsconfig.json",
+        "lib/magicseo/**",
+        "tests/magicseo/**"
+      ],
+      "never_touch": [
+        ".agents/**",
+        ".bb/**",
+        "AGENTS.md",
+        ".gitignore"
+      ],
+      "expected_outputs": [
+        "package.json",
+        "package-lock.json",
+        "tsconfig.json",
+        "lib/magicseo/client.ts",
+        "lib/magicseo/types.ts",
+        "lib/magicseo/lifecycle.ts",
+        "tests/magicseo/client.test.ts",
+        "tests/magicseo/lifecycle.test.ts"
+      ],
+      "interfaces": [
+        "lib/magicseo/client.ts: export class MagicSeoClient { constructor(opts: { credentials: () => Promise<{ username: string; password: string }>; fetch?: typeof fetch; baseUrl?: string /* default https://lk.magicseo.ru */; onMutation?: (e: { method: string; path: string; status: number; ok: boolean; at: string }) => void }) }",
+        "MagicSeoClient reads: listProjects(), catalogItems(), getProject(id, {from,to}?), getAutolaunch(id), keywordsV2(id, {offset,limit,from,to}), positions(id, {from,to}) with checks_mode=one_per_day, positionsJob(id), balance(), balanceDetailed(), billingCounters(kind: 'income'|'expense'|'in_promotion', {from,to}), listFolders(), keywordsImportPattern()",
+        "MagicSeoClient mutations (each reported to onMutation): createProject(body), copyProject({project_id,name,region}), updateProject(id, body), startJob(id) = POST /backend/project/{id}/job, stopJob(id) = DELETE /backend/project/{id}/job, setAutolaunch(id, settings) = PATCH /backend/project/{id}/autolaunch, resetAutolaunchError(id), startPositionsJob(id) = POST /backend/project/{id}/positions_job, uploadKeywords(id, csvText) = multipart field 'file' to POST /backend/project/{id}/keywords, setKeywordsField(id, {ids,field,value}), createFolder(body), moveCatalogItem(itemId, body)",
+        "export class MagicSeoError extends Error { status: number; path: string }",
+        "lib/magicseo/lifecycle.ts: export async function startPromotion(client, projectId): Promise<{ ok: true; attempts: number }>; export async function stopPromotion(client, projectId): Promise<{ ok: true; attempts: number }>; export class StopFailedError extends Error { projectId: number; attempts: number }; stopPromotion treats a 404 or body error from DELETE /job as non-fatal when the following GET autolaunch shows active:false."
+      ],
+      "invariants": [
+        "lib/** imports only node: built-ins and relative .ts files (with the .ts extension), so `node --test` runs the tests without npm install; type-only imports use `import type`.",
+        "Login body, password and JWT never reach onMutation, thrown error messages or console output.",
+        "No client method exists for payments (payments/*), balance/transfer, separate_balance, project delete or /backend/admin/* (CONTEXT.md no-gos).",
+        "Only endpoints listed in api-map.md §1–§4 are called.",
+        "Follow the pattern and conventions of these files outside this repository (read them before writing): /Users/vechkasov/Documents/BB-сервис/plugins/bb-plugin-repo-pulse/package.json, /Users/vechkasov/Documents/BB-сервис/plugins/bb-plugin-repo-pulse/tsconfig.json.",
+        "Files under .bb/ and .agents/ are untracked: when a worktree lacks them, read them at /Users/vechkasov/Documents/BB-сервис/plugins/magicseo/<same path>.",
+        "package.json follows bb-plugin-repo-pulse (type module, bb.server ./server.ts, bb.app ./app.tsx, scripts test/typecheck/build with build = `bb plugin build`, @get-bb/plugin-sdk ^0.6.104 as in bb-plugin-lane-pilot). tsconfig: strict, moduleResolution bundler, jsx react-jsx, allowImportingTsExtensions, noEmit, paths @/* → ./*. Start = autolaunch active:true, stop = autolaunch active:false + DELETE job: working assumption from api-map.md §5, first live use only after the owner's yes."
+      ],
+      "out_of_scope": [
+        "Env Catalog lookup (T3 supplies the credentials callback)",
+        "Any live call to lk.magicseo.ru in tests (tests use a fake fetch)",
+        "Competitors, referrals, tickets, Strapi help endpoints"
+      ],
+      "depends_on": [],
+      "acceptance": [
+        "`node --test tests/magicseo/client.test.ts` exits 0; against a fake fetch it asserts, for every read and mutation method named in interfaces, the HTTP method and path from api-map.md (example: stopJob(5) → DELETE https://lk.magicseo.ru/backend/project/5/job), the header `Authorization: Bearer <token>` taken from POST /backend/login result.token, and that a 200 response whose body field `error` is a non-empty string throws MagicSeoError.",
+        "In the same test file: a 401 answer triggers exactly one new POST /backend/login and one repeat of the request; a token whose JWT `exp` is more than 60 s ahead is reused, so two calls make one login; each mutation calls onMutation once with method, path, status, ok and at, and reads never call it.",
+        "Security (SECURITY.md plaintext-credential risk): in tests/magicseo/client.test.ts the fake password and fake token are asserted absent from every onMutation entry and from every MagicSeoError message, and POST /backend/login is asserted absent from onMutation entries.",
+        "`node --test tests/magicseo/lifecycle.test.ts` exits 0; it asserts that startPromotion GETs autolaunch and PATCHes it with active:true and the other fields as read; stopPromotion PATCHes active:false, sends DELETE /backend/project/{id}/job and confirms with GET autolaunch active:false; a 404 or a body error from DELETE /job followed by GET autolaunch active:false returns { ok: true } without a retry (idle project); when GET autolaunch shows active:true it retries up to 3 attempts and then throws StopFailedError with attempts 3."
+      ],
+      "verify": "tests",
+      "verification": [
+        {
+          "command": "node --test tests/magicseo/client.test.ts",
+          "cwd": "."
+        },
+        {
+          "command": "node --test tests/magicseo/lifecycle.test.ts",
+          "cwd": "."
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "id": "T2",
+      "title": "Site rules config, read-only WordPress concerts source, city → Yandex region + timezone map",
+      "risk": "medium",
+      "lane": "writer",
+      "covers": [
+        "D5",
+        "D6"
+      ],
+      "read_first": [
+        ".agents/plans/atmosphere-cities.json",
+        ".agents/plans/magicseo-regions.json",
+        ".agents/plans/concerts-api.md",
+        ".agents/phases/ph_f16b2b8b06/CONTEXT.md",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/bundle-notes.md",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/samples/projects_list.json"
+      ],
+      "owns_paths": [
+        "lib/config.ts",
+        "lib/concerts/**",
+        "lib/cities/**",
+        "tests/config.test.ts",
+        "tests/concerts/**",
+        "tests/cities/**",
+        "tests/fixtures/atmosphere-cities.json",
+        "tests/fixtures/atmosphere-concerts-page.json"
+      ],
+      "never_touch": [
+        ".agents/**",
+        ".bb/**",
+        "AGENTS.md",
+        ".gitignore",
+        "package.json",
+        "lib/magicseo/**"
+      ],
+      "expected_outputs": [
+        "lib/config.ts",
+        "lib/concerts/wordpress.ts",
+        "lib/cities/index.ts",
+        "lib/cities/cities.json",
+        "tests/fixtures/atmosphere-cities.json",
+        "tests/fixtures/atmosphere-concerts-page.json",
+        "tests/config.test.ts",
+        "tests/concerts/wordpress.test.ts",
+        "tests/cities/cities.test.ts"
+      ],
+      "interfaces": [
+        "lib/concerts/wordpress.ts: export type Concert = { id: number; status: string; link: string; city: string /* meta.gorod */; cityIn: string /* meta.v_gorode */; date: string /* YYYY-MM-DD */; time: string /* HH:MM city local */; soldOut: boolean; postponedTo: string | null; modifiedGmt: string }; export async function fetchConcerts(opts: { baseUrl: string; postType: string; fetch?: typeof fetch; basicAuth?: { username: string; password: string } }): Promise<Concert[]>",
+        "lib/cities/index.ts: export function resolveCity(name: string, opts?: { aliases?: Record<string, string>; regionOverrides?: Record<string, number>; timeZoneOverrides?: Record<string, string> }): { name: string; region: number; timeZone: string } | null; export function cityByRegion(region: number): string | null; export function concertStartUtc(c: { date: string; time: string }, timeZone: string): Date",
+        "lib/config.ts: export type SiteConfig = { id: string; domain: string; concerts: { baseUrl: string; postType: string; credentialName: string | null }; nameTemplate: string; keywordTemplates: string[]; cityAliases: Record<string, string>; regionOverrides: Record<string, number>; timeZoneOverrides: Record<string, string>; mode: 'off' | 'dry-run' | 'live'; stopHoursBefore: number; newProject: { provider: string; device: number; parentFolderId: number | null; autolaunch: Record<string, unknown> | null } | null }; export type Config = { sites: SiteConfig[]; automationIntervalMinutes: number; positionsIntervalHours: number }; export function parseConfig(raw: unknown): Config; export const DEFAULT_CONFIG: Config"
+      ],
+      "invariants": [
+        "lib/** imports only node: built-ins and relative .ts / .json files, so `node --test` runs without npm install.",
+        "fetchConcerts sends only GET requests (D6: read-only towards concert sites).",
+        "DEFAULT_CONFIG has one site: domain atmosphere-show.ru, concerts.baseUrl https://atmosphere-show.ru, postType concerts, credentialName null (published concerts are public), mode 'dry-run', stopHoursBefore 48, keywordTemplates ['оркестр при свечах %город%', '3000 свечей %город%'], nameTemplate '[%город%] ATMOSPHERE-SHOW.RU', newProject null, cityAliases { 'СПб': 'Санкт-Петербург' }, regionOverrides {}.",
+        "Files under .bb/ and .agents/ are untracked: when a worktree lacks them, read them at /Users/vechkasov/Documents/BB-сервис/plugins/magicseo/<same path>.",
+        "lib/cities/cities.json is built from .agents/plans/atmosphere-cities.json (152 cities with yandexRegionCandidates from the MagicSEO bundle) and .agents/plans/magicseo-regions.json (region id → name, 1758 entries); no network download. A city with exactly one candidate gets that region; a city with 0 or 2+ candidates (Благовещенск, Дзержинск, Железногорск, Зеленогорск, Киров, Кудрово, Московская область, Новосибирск (Академгородок), Новый город) gets region null and resolveCity returns null for it unless regionOverrides names its region — never a guessed id. Time zones are IANA names per city (Europe/Kaliningrad, Europe/Moscow, Europe/Samara, Asia/Yekaterinburg, Asia/Omsk, Asia/Novosibirsk, Asia/Krasnoyarsk, Asia/Irkutsk, …). cityByRegion uses magicseo-regions.json names. tests/fixtures/atmosphere-cities.json is a copy of .agents/plans/atmosphere-cities.json, so tests do not read .agents/."
+      ],
+      "out_of_scope": [
+        "Sold-out and postponement rules (deferred in CONTEXT.md); the fields are only mapped",
+        "Drafts and authenticated WordPress reads",
+        "Any write to atmosphere-show.ru"
+      ],
+      "depends_on": [],
+      "acceptance": [
+        "`node --test tests/concerts/wordpress.test.ts` exits 0; with a fake fetch serving 2 pages (X-WP-TotalPages: 2) it asserts fetchConcerts returns the concerts of both pages, every request has method GET and path /wp-json/wp/v2/concerts?per_page=100&page=N, the Concert fields map from tests/fixtures/atmosphere-concerts-page.json (a trimmed real page fetched once from the public endpoint), and an Authorization header is present only when basicAuth is passed.",
+        "`node --test tests/cities/cities.test.ts` exits 0; it asserts that every city in tests/fixtures/atmosphere-cities.json with exactly one yandexRegionCandidates entry (143 cities) resolves through resolveCity to that region and to a timeZone that `new Intl.DateTimeFormat('en', { timeZone })` accepts; resolveCity('Москва').region is 213, resolveCity('Санкт-Петербург').region is 2, resolveCity('Воткинск').region is 11149, resolveCity('СПб', { aliases: { 'СПб': 'Санкт-Петербург' } }).name is 'Санкт-Петербург', resolveCity('Киров') is null, resolveCity('Киров', { regionOverrides: { 'Киров': 46 } }).region is 46; cityByRegion(213) is 'Москва'.",
+        "The same cities test asserts concertStartUtc({ date: '2027-01-31', time: '19:00' }, 'Europe/Samara').toISOString() is '2027-01-31T15:00:00.000Z', with 'Asia/Novosibirsk' is '2027-01-31T12:00:00.000Z' and with 'Europe/Moscow' is '2027-01-31T16:00:00.000Z'; resolveCity('Воткинск').timeZone is 'Europe/Samara'.",
+        "`node --test tests/config.test.ts` exits 0; it asserts parseConfig({}) deep-equals DEFAULT_CONFIG, parseConfig with a second site given only id, domain and concerts.baseUrl returns two sites with the second filled from defaults (mode 'dry-run', stopHoursBefore 48), and parseConfig throws on mode 'auto'."
+      ],
+      "verify": "tests",
+      "verification": [
+        {
+          "command": "node --test tests/concerts/wordpress.test.ts",
+          "cwd": "."
+        },
+        {
+          "command": "node --test tests/cities/cities.test.ts",
+          "cwd": "."
+        },
+        {
+          "command": "node --test tests/config.test.ts",
+          "cwd": "."
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "id": "T3",
+      "title": "Plugin server + site → city-project tree with state, spend, positions and manual controls (EN/RU UI)",
+      "risk": "high",
+      "lane": "writer",
+      "covers": [
+        "D1",
+        "D6",
+        "D7"
+      ],
+      "read_first": [
+        ".agents/phases/ph_f16b2b8b06/CONTEXT.md",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/api-map.md",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/samples/catalog_items.txt",
+        ".agents/phases/ph_f16b2b8b06/SECURITY.md",
+        "lib/magicseo/client.ts",
+        "lib/magicseo/lifecycle.ts",
+        "lib/config.ts",
+        "lib/cities/index.ts",
+        "package.json",
+        "tsconfig.json"
+      ],
+      "owns_paths": [
+        "package.json",
+        "package-lock.json",
+        "tsconfig.json",
+        "README.md",
+        "server.ts",
+        "app.tsx",
+        "app.css",
+        "components.json",
+        "components/**",
+        "lib/utils.ts",
+        "lib/credentials.ts",
+        "lib/hierarchy.ts",
+        "lib/log-store.ts",
+        "server/context.ts",
+        "server/automation.ts",
+        "server/positions.ts",
+        "ui/automation-tab.tsx",
+        "ui/reports-tab.tsx",
+        "i18n/index.ts",
+        "i18n/hierarchy.ts",
+        "tests/credentials.test.ts",
+        "tests/hierarchy.test.ts",
+        "tests/log-store.test.ts",
+        "tests/fixtures/catalog-items.json"
+      ],
+      "never_touch": [
+        ".agents/**",
+        ".bb/**",
+        "AGENTS.md",
+        ".gitignore",
+        "lib/magicseo/**",
+        "lib/config.ts",
+        "lib/cities/**",
+        "lib/concerts/**"
+      ],
+      "expected_outputs": [
+        "server.ts",
+        "app.tsx",
+        "app.css",
+        "server/context.ts",
+        "server/automation.ts",
+        "server/positions.ts",
+        "ui/automation-tab.tsx",
+        "ui/reports-tab.tsx",
+        "lib/credentials.ts",
+        "lib/hierarchy.ts",
+        "lib/log-store.ts",
+        "i18n/index.ts",
+        "i18n/hierarchy.ts",
+        "README.md",
+        "tests/credentials.test.ts",
+        "tests/hierarchy.test.ts",
+        "tests/log-store.test.ts",
+        "lib/utils.ts",
+        "components.json",
+        "components/ui/button.tsx",
+        "components/ui/table.tsx",
+        "components/ui/switch.tsx",
+        "tests/fixtures/catalog-items.json"
+      ],
+      "interfaces": [
+        "lib/credentials.ts: export async function loadLogin(callRpc: (req: { pluginId: string; method: string; input: unknown }) => Promise<unknown>, name: string): Promise<{ username: string; password: string }> — calls pluginId 'env-catalog', method 'env_get_value', input { name }, reads access.username / access.password",
+        "lib/hierarchy.ts: export type ProjectRow = { id: number; name: string; domain: string; region: number; active: boolean; keywords: number; periodSpent: number; totalSpent: number; lastJobStatus: number | null }; export type SiteNode = { domain: string; configured: boolean; projects: (ProjectRow & { city: string })[] }; export function buildHierarchy(rows: ProjectRow[], configuredDomains: string[]): SiteNode[]; export function rowsFromCatalog(catalog: unknown, active: Record<number, boolean>): ProjectRow[] — walks items/children, takes project_info (id, name, domain, region, total_money_spent/100, period_money_spent/100) and keywords.keywords_count",
+        "lib/log-store.ts: export async function appendLog(kv: { get(k: string): Promise<unknown>; set(k: string, v: unknown): Promise<void> }, key: string, entry: object, max: number): Promise<void>; export async function readLog(kv, key): Promise<object[]>",
+        "server/context.ts: export type PluginContext = { bb: BbPluginApi; client: MagicSeoClient; getConfig(): Promise<Config>; saveConfig(c: Config): Promise<Config>; kv: BbPluginApi['storage']['kv'] }",
+        "server/automation.ts and server/positions.ts (stubs filled by T5/T6): export const automationRpc = {} / positionsRpc = {}; export function automationHandlers(ctx: PluginContext) / positionsHandlers(ctx) returning {}; export function registerAutomation(ctx) / registerPositions(ctx): void. server.ts spreads both contracts into defineRpcContract and both handler objects into the RPC handlers, and calls both register functions at startup.",
+        "ui/automation-tab.tsx and ui/reports-tab.tsx (stubs filled by T5/T6): export function AutomationTab() / ReportsTab() rendering an empty state; app.tsx shows tabs Projects | Automation | Reports.",
+        "RPC of this task: tree → { balanceRub: number; sites: SiteNode[] }; project_keywords(id) → keyword rows from keywordsV2 with text, last pc/mobile position and found_url; project_start(id) / project_stop(id) via startPromotion / stopPromotion; positions_check(id) via startPositionsJob; mutation_log → last entries; config / save_config via parseConfig.",
+        "lib/utils.ts: export function cn(...inputs: ClassValue[]): string (clsx + tailwind-merge, copied from /Users/vechkasov/Documents/BB-сервис/plugins/bb-plugin-repo-pulse/lib/utils.ts) used by components/ui/*; components/ui/button.tsx, table.tsx, switch.tsx copied from bb-plugin-repo-pulse/components/ui."
+      ],
+      "invariants": [
+        "MAGICSEO_LOGIN is read only through Env Catalog RPC env_get_value at runtime (D7); no credential value is written to KV, files, logs or the UI.",
+        "Every onMutation entry of the client is persisted with appendLog to KV key 'mutation-log', max 500 entries (D6).",
+        "Every user-visible string comes from i18n/hierarchy.ts, where `export const ru: Record<keyof typeof en, string>`; English is the default, Russian when document.documentElement.lang starts with 'ru'.",
+        "Styles use Pokecut kit classes with the prefix `ms-` and only `--pk-*` tokens with BB fallbacks; no hex colours in app.css (docs/DESIGN.md).",
+        "Money: account balance = balance().money_balance / 100 rubles (api-map.md §2); project spend comes from catalogItems() project_info.period_money_spent and total_money_spent (kopecks) / 100 rubles (catalog_items.txt sample: total_money_spent 79800 = 798 ₽); project_info.total_spent / period_spent are click counts and are shown as clicks.",
+        "Follow the pattern and conventions of these files outside this repository (read them before writing): /Users/vechkasov/Documents/BB-сервис/docs/DESIGN.md, /Users/vechkasov/Documents/BB-сервис/docs/design/pokecut-plugin.css, /Users/vechkasov/Documents/BB-сервис/docs/templates/component.md, /Users/vechkasov/Documents/BB-сервис/plugins/bb-plugin-lane-pilot/app.css, /Users/vechkasov/Documents/BB-сервис/plugins/bb-plugin-repo-pulse/server.ts, /Users/vechkasov/Documents/BB-сервис/plugins/bb-plugin-repo-pulse/app.tsx, /Users/vechkasov/Documents/BB-сервис/plugins/bb-plugin-repo-pulse/i18n.ts, /Users/vechkasov/Documents/BB-сервис/plugins/bb-plugin-repo-pulse/messages.ts, /Users/vechkasov/Documents/BB-сервис/plugins/bb-plugin-repo-pulse/components/ui/button.tsx, /Users/vechkasov/Documents/BB-сервис/plugins/bb-plugin-repo-pulse/components.json, /Users/vechkasov/Documents/BB-сервис/plugins/bb-plugin-env-catalog/server.ts, /Users/vechkasov/Documents/BB-сервис/plugins/bb-plugin-image-studio/server.ts.",
+        "Files under .bb/ and .agents/ are untracked: when a worktree lacks them, read them at /Users/vechkasov/Documents/BB-сервис/plugins/magicseo/<same path>.",
+        "BB plugin KV holds at most 256 KiB (262144 bytes) per key: every value this task writes stays below that size. mutation-log entries hold only method, path, status, ok, at."
+      ],
+      "out_of_scope": [
+        "Automation rules and their UI (T4, T5)",
+        "Position history storage and reports (T6)",
+        "Install on the BB hub, GitHub publication, GitNexus index, docs/REGISTRY.md entry (PM steps after acceptance)"
+      ],
+      "depends_on": [
+        "T1",
+        "T2"
+      ],
+      "acceptance": [
+        "`node --test tests/credentials.test.ts` exits 0; it asserts loadLogin(fakeCallRpc, 'MAGICSEO_LOGIN') calls pluginId 'env-catalog', method 'env_get_value', input { name: 'MAGICSEO_LOGIN' } and returns access.username and access.password; when access has no password it throws an error whose message contains 'MAGICSEO_LOGIN' and does not contain the fake username (D7, SECURITY.md plaintext-credential risk).",
+        "`node --test tests/hierarchy.test.ts` exits 0; given rows of domains proart-show.ru, museshow.ru and atmosphere-show.ru with configuredDomains ['atmosphere-show.ru'], buildHierarchy returns 3 SiteNode entries with atmosphere-show.ru first and configured true, projects sorted by city, city taken from cityByRegion(region) and the project name when the region is unknown, and active, keywords, periodSpent, totalSpent copied from the row; a second case feeds rows built by rowsFromCatalog(sample) from tests/fixtures/catalog-items.json (a trimmed copy of catalog_items.txt) and asserts the SelfyStudio row has totalSpent 798 (rubles) and region 213.",
+        "`node --test tests/log-store.test.ts` exits 0; after 502 appendLog calls with max 500, readLog returns 500 entries whose first is entry #3, and JSON.stringify of the stored value of 500 mutation entries is shorter than 262144 characters.",
+        "`npm install --no-audit --no-fund --silent && npm run build` exits 0 and `npx tsc --noEmit -p tsconfig.json` exits 0; `grep -c 'Record<keyof typeof en, string>' i18n/hierarchy.ts` prints 1.",
+        "`! grep -rnE '#[0-9a-fA-F]{3,8}\\b' app.css` exits 0 (no hex colours), and `! grep -rn --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.bb --exclude-dir=.agents --exclude-dir=dist '<magicseo-login>' .` exits 0 (no credential literal in the plugin, SECURITY.md)."
+      ],
+      "verify": "tests",
+      "verification": [
+        {
+          "command": "node --test tests/credentials.test.ts",
+          "cwd": "."
+        },
+        {
+          "command": "node --test tests/hierarchy.test.ts",
+          "cwd": "."
+        },
+        {
+          "command": "node --test tests/log-store.test.ts",
+          "cwd": "."
+        },
+        {
+          "command": "npm install --no-audit --no-fund --silent && npm run build",
+          "cwd": "."
+        },
+        {
+          "command": "npx tsc --noEmit -p tsconfig.json",
+          "cwd": "."
+        },
+        {
+          "command": "grep -c 'Record<keyof typeof en, string>' i18n/hierarchy.ts",
+          "cwd": "."
+        },
+        {
+          "command": "! grep -rnE '#[0-9a-fA-F]{3,8}\\b' app.css",
+          "cwd": "."
+        },
+        {
+          "command": "! grep -rn --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.bb --exclude-dir=.agents --exclude-dir=dist '<magicseo-login>' .",
+          "cwd": "."
+        }
+      ],
+      "qa_cases": [
+        "[UI-observable] QA-W2-1: Install the built plugin in BB, open the MagicSEO app, tab Projects. Expect: Header shows the account balance in ₽; site nodes proart-show.ru (7 projects) and museshow.ru (16 projects) are listed; expanding a project lists its keywords with pc/mobile positions; each project row has Start/Stop and Check positions buttons; with BB in Russian the tab is named «Проекты»."
+      ]
+    },
+    {
+      "schema_version": 2,
+      "id": "T4",
+      "title": "Automation rules engine: per-city plan (create/start/stop), keyword templates, dry-run executor with stop verification",
+      "risk": "critical",
+      "lane": "writer",
+      "covers": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D6",
+        "D8"
+      ],
+      "read_first": [
+        ".agents/phases/ph_f16b2b8b06/CONTEXT.md",
+        ".agents/plans/concerts-api.md",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/api-map.md",
+        "lib/magicseo/client.ts",
+        "lib/magicseo/lifecycle.ts",
+        "lib/concerts/wordpress.ts",
+        "lib/cities/index.ts",
+        "lib/config.ts",
+        ".agents/plans/magicseo-api/bundle-notes.md"
+      ],
+      "owns_paths": [
+        "lib/automation/**",
+        "tests/automation/**"
+      ],
+      "never_touch": [
+        ".agents/**",
+        ".bb/**",
+        "AGENTS.md",
+        "lib/magicseo/**",
+        "lib/config.ts",
+        "lib/cities/**",
+        "lib/concerts/**",
+        "server.ts",
+        "server/**"
+      ],
+      "expected_outputs": [
+        "lib/automation/planner.ts",
+        "lib/automation/keywords.ts",
+        "lib/automation/executor.ts",
+        "lib/automation/run.ts",
+        "tests/automation/planner.test.ts",
+        "tests/automation/keywords.test.ts",
+        "tests/automation/executor.test.ts"
+      ],
+      "interfaces": [
+        "lib/automation/planner.ts: export type CityProject = { id: number; name: string; domain: string; region: number; active: boolean }; export type Action = { kind: 'create' | 'start' | 'stop' | 'skip'; city: string; region: number | null; projectId: number | null; name?: string; keywords?: string[]; reason: string; nearestStartUtc: string | null }; export function planSite(input: { site: SiteConfig; concerts: Concert[]; projects: CityProject[]; now: Date }): Action[]",
+        "lib/automation/keywords.ts: export function renderKeywords(templates: string[], city: { gorod: string; vGorode: string }): string[]; export function toKeywordsCsv(keywords: string[]): string",
+        "lib/automation/executor.ts: export type ActionResult = Action & { mode: 'dry-run' | 'live'; outcome: 'planned' | 'done' | 'blocked' | 'alert'; detail: string; at: string; keywordsCount?: number } /* ActionResult carries keywordsCount, not the keywords array */; export async function executeActions(actions: Action[], deps: { client: MagicSeoClient; site: SiteConfig; mode: 'dry-run' | 'live' }): Promise<ActionResult[]>",
+        "lib/automation/run.ts: export async function runSite(deps: { site: SiteConfig; client: MagicSeoClient; fetchConcerts: typeof fetchConcerts; now: () => Date; mode: 'dry-run' | 'live' }): Promise<ActionResult[]> — fetches concerts, lists projects of site.domain with getAutolaunch().active, plans and executes"
+      ],
+      "invariants": [
+        "Rules (D2, D3): only concerts with status 'publish' and a non-empty link count; per city the nearest concert whose start (concertStartUtc in the city time zone, timeZoneOverrides first) is after now decides: start − now > stopHoursBefore h → the city project runs (create it if none, start it if inactive); start − now ≤ stopHoursBefore h or no future concert → stop it if active.",
+        "A city project is the project with domain === site.domain and region === the city's region (D1); projects of other domains never appear in actions.",
+        "Balance is never read (D4): lib/automation contains no 'balance' identifier.",
+        "mode 'dry-run' makes zero mutating client calls (D6); live 'create' with site.newProject null returns outcome 'blocked', detail 'new_project_settings_missing', and makes no createProject call.",
+        "Keywords (D8): %город% → meta.gorod, %в_городе% → meta.v_gorode; duplicates removed, order kept.",
+        "lib/** imports only node: built-ins and relative .ts files.",
+        "Files under .bb/ and .agents/ are untracked: when a worktree lacks them, read them at /Users/vechkasov/Documents/BB-сервис/plugins/magicseo/<same path>.",
+        "The CSV layout (one keyword per line, no header) is a working assumption from bundle-notes.md (`FormData.append('file', …)`); it is confirmed against GET /backend/keywords/import_pattern in the owner-approved live check after the phase, not by this task; tests make no network call."
+      ],
+      "out_of_scope": [
+        "Sold-out and postponement handling (deferred)",
+        "Values of new-project promotion settings (provider, device, autopilot budget/target: deferred; read from site.newProject)",
+        "Scheduling, KV log and UI (T5)",
+        "Any live call to lk.magicseo.ru, including GET /backend/keywords/import_pattern"
+      ],
+      "depends_on": [
+        "T1",
+        "T2"
+      ],
+      "acceptance": [
+        "`node --test tests/automation/planner.test.ts` exits 0 with now = 2027-01-29T12:00:00Z and cases: (a) city without a project and a published linked concert 5 days ahead → actions create then start with name from nameTemplate and region from resolveCity; (b) inactive project, concert 49 h ahead → start; (c) active project, nearest concert 47 h ahead and a second one 10 days ahead → stop; (d) concert exactly 48 h ahead → stop; (e) draft concert or empty link → no action for that city; (f) active project with no future concert → stop; (g) a museshow.ru project in the same region → absent from actions; (h) city unknown to resolveCity → skip with reason 'unmapped_city'.",
+        "`node --test tests/automation/keywords.test.ts` exits 0; renderKeywords(['оркестр при свечах %город%', 'концерт %в_городе%', 'оркестр при свечах %город%'], { gorod: 'Воткинск', vGorode: 'в Воткинске' }) deep-equals ['оркестр при свечах Воткинск', 'концерт в Воткинске'], and toKeywordsCsv(['a b', 'c']) is exactly 'a b\\nc\\n' (one keyword per line, UTF-8, no header).",
+        "`node --test tests/automation/executor.test.ts` exits 0; with a fake client counting calls: dry-run over create/start/stop actions → 0 mutating calls and every result outcome 'planned'; live create with site.newProject set → createProject with name, domain, region, provider, device, then uploadKeywords with the CSV, then startPromotion; live create with newProject null → outcome 'blocked' and 0 createProject calls; live stop where stopPromotion throws StopFailedError → outcome 'alert'.",
+        "`! grep -rniq balance lib/automation` exits 0 (D4: no balance identifier in the rules engine)."
+      ],
+      "verify": "tests",
+      "verification": [
+        {
+          "command": "node --test tests/automation/planner.test.ts",
+          "cwd": "."
+        },
+        {
+          "command": "node --test tests/automation/keywords.test.ts",
+          "cwd": "."
+        },
+        {
+          "command": "node --test tests/automation/executor.test.ts",
+          "cwd": "."
+        },
+        {
+          "command": "! grep -rniq balance lib/automation",
+          "cwd": "."
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "id": "T5",
+      "title": "Automation in the plugin: schedule, lifecycle log, site rules editor, dry-run preview and Live switch (EN/RU)",
+      "risk": "high",
+      "lane": "writer",
+      "covers": [
+        "D2",
+        "D3",
+        "D5",
+        "D6",
+        "D8"
+      ],
+      "read_first": [
+        ".agents/phases/ph_f16b2b8b06/CONTEXT.md",
+        "server.ts",
+        "server/context.ts",
+        "server/automation.ts",
+        "ui/automation-tab.tsx",
+        "app.tsx",
+        "app.css",
+        "i18n/index.ts",
+        "i18n/hierarchy.ts",
+        "lib/log-store.ts",
+        "lib/config.ts",
+        "lib/automation/run.ts",
+        "lib/automation/planner.ts",
+        "lib/automation/executor.ts"
+      ],
+      "owns_paths": [
+        "server/automation.ts",
+        "server/automation-handlers.ts",
+        "ui/automation-tab.tsx",
+        "ui/automation-tab.css",
+        "i18n/automation.ts",
+        "tests/server/automation-handlers.test.ts"
+      ],
+      "never_touch": [
+        ".agents/**",
+        ".bb/**",
+        "AGENTS.md",
+        "server.ts",
+        "app.tsx",
+        "app.css",
+        "lib/**",
+        "server/positions.ts",
+        "ui/reports-tab.tsx"
+      ],
+      "expected_outputs": [
+        "server/automation-handlers.ts",
+        "server/automation.ts",
+        "ui/automation-tab.tsx",
+        "ui/automation-tab.css",
+        "i18n/automation.ts",
+        "tests/server/automation-handlers.test.ts"
+      ],
+      "interfaces": [
+        "server/automation-handlers.ts (no runtime import of @get-bb/plugin-sdk or zod; `import type` only): export function createAutomationHandlers(deps: { getConfig; saveConfig; kv; client; fetchConcerts; now: () => Date }) returning { automation_preview(siteId), automation_run(siteId), lifecycle_log(siteId), site_save(site) }; server/*-handlers.ts import lib modules by relative .ts paths so `node --test` runs them without npm install.",
+        "automation_preview always runs runSite with mode 'dry-run'; automation_run uses site.mode and returns [] for 'off'; both append every ActionResult with appendLog to KV key 'lifecycle-log:<siteId>', max 200, each entry without the keywords array (keywordsCount only); site_save validates through parseConfig and rejects an invalid site with an error.",
+        "server/automation.ts: automationRpc (zod contract for the four methods), automationHandlers(ctx) wrapping createAutomationHandlers, registerAutomation(ctx) running automation_run for each site with mode ≠ 'off' through bb.background.schedule('automation', '* * * * *', …) that runs a site only when config.automationIntervalMinutes have passed since its last run (pattern of bb-plugin-repo-pulse/server.ts line ~1104)."
+      ],
+      "invariants": [
+        "Live mode needs an explicit owner action: the Live option in the UI opens a confirm dialog; DEFAULT_CONFIG stays 'dry-run'.",
+        "An ActionResult with outcome 'alert' is shown as a danger status pill at the top of the Automation tab until a newer run of that city ends with outcome 'done'.",
+        "All user-visible strings come from i18n/automation.ts with `export const ru: Record<keyof typeof en, string>`.",
+        "ui/automation-tab.css uses only `--pk-*` tokens with BB fallbacks, no hex colours.",
+        "Follow the pattern and conventions of these files outside this repository (read them before writing): /Users/vechkasov/Documents/BB-сервис/docs/DESIGN.md, /Users/vechkasov/Documents/BB-сервис/docs/design/pokecut-plugin.css, /Users/vechkasov/Documents/BB-сервис/plugins/bb-plugin-repo-pulse/schedule.ts.",
+        "BB plugin KV holds at most 256 KiB (262144 bytes) per key: every value this task writes stays below that size."
+      ],
+      "out_of_scope": [
+        "Changing the rules engine (T4)",
+        "Sold-out/postponement rules and new-project setting values (deferred: the editor offers the fields of site.newProject, values are the owner's)"
+      ],
+      "depends_on": [
+        "T3",
+        "T4"
+      ],
+      "acceptance": [
+        "`node --test tests/server/automation-handlers.test.ts` exits 0; with a fake client, fake fetchConcerts and an in-memory kv: automation_preview on a site in mode 'live' makes 0 mutating client calls and appends entries with mode 'dry-run' to 'lifecycle-log:<siteId>'; automation_run on a site in mode 'off' returns [] and makes 0 client calls; site_save with mode 'auto' throws and the stored config keeps its previous site. After 205 automation_preview calls the stored 'lifecycle-log:<siteId>' value has 200 entries, no entry has a 'keywords' field, and its JSON.stringify length is below 262144.",
+        "`npm install --no-audit --no-fund --silent && npm run build` exits 0 and `npx tsc --noEmit -p tsconfig.json` exits 0.",
+        "`grep -c 'Record<keyof typeof en, string>' i18n/automation.ts` prints 1 and `! grep -rnE '#[0-9a-fA-F]{3,8}\\b' ui/automation-tab.css` exits 0."
+      ],
+      "verify": "tests",
+      "verification": [
+        {
+          "command": "node --test tests/server/automation-handlers.test.ts",
+          "cwd": "."
+        },
+        {
+          "command": "npm install --no-audit --no-fund --silent && npm run build",
+          "cwd": "."
+        },
+        {
+          "command": "npx tsc --noEmit -p tsconfig.json",
+          "cwd": "."
+        },
+        {
+          "command": "grep -c 'Record<keyof typeof en, string>' i18n/automation.ts",
+          "cwd": "."
+        },
+        {
+          "command": "! grep -rnE '#[0-9a-fA-F]{3,8}\\b' ui/automation-tab.css",
+          "cwd": "."
+        }
+      ],
+      "qa_cases": [
+        "[UI-observable] QA-W3-1: Open the MagicSEO app, tab Automation, site atmosphere-show.ru, press Preview. Expect: Mode shows Dry-run; the preview table lists cities from the live concerts API with columns city, nearest concert (city local time), action, reason; picking Live opens a confirm dialog; keyword templates show 'оркестр при свечах %город%' and '3000 свечей %город%'; in Russian BB the tab is «Автоматизация»."
+      ]
+    },
+    {
+      "schema_version": 2,
+      "id": "T6",
+      "title": "Position harvesting on a schedule and reports per site, city and keyword with CSV export (EN/RU)",
+      "risk": "medium",
+      "lane": "writer",
+      "covers": [
+        "D1"
+      ],
+      "read_first": [
+        ".agents/phases/ph_f16b2b8b06/CONTEXT.md",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/api-map.md",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/samples/positions_527041_full_range.json",
+        ".bb/chats/thr_tus6ykzucc/artifacts/recon/samples/project_544055_keywords_v2.json",
+        "server.ts",
+        "server/context.ts",
+        "server/positions.ts",
+        "ui/reports-tab.tsx",
+        "app.tsx",
+        "i18n/index.ts",
+        "lib/magicseo/client.ts",
+        "lib/cities/index.ts",
+        "lib/config.ts"
+      ],
+      "owns_paths": [
+        "lib/positions/**",
+        "server/positions.ts",
+        "server/positions-handlers.ts",
+        "ui/reports-tab.tsx",
+        "ui/reports-tab.css",
+        "i18n/reports.ts",
+        "tests/positions/**",
+        "tests/server/positions-handlers.test.ts",
+        "tests/fixtures/positions-sample.json"
+      ],
+      "never_touch": [
+        ".agents/**",
+        ".bb/**",
+        "AGENTS.md",
+        "server.ts",
+        "app.tsx",
+        "app.css",
+        "lib/magicseo/**",
+        "lib/config.ts",
+        "lib/cities/**",
+        "lib/automation/**",
+        "server/automation.ts",
+        "ui/automation-tab.tsx"
+      ],
+      "expected_outputs": [
+        "lib/positions/harvest.ts",
+        "lib/positions/report.ts",
+        "server/positions-handlers.ts",
+        "server/positions.ts",
+        "ui/reports-tab.tsx",
+        "ui/reports-tab.css",
+        "i18n/reports.ts",
+        "tests/positions/harvest.test.ts",
+        "tests/positions/report.test.ts",
+        "tests/server/positions-handlers.test.ts",
+        "tests/fixtures/positions-sample.json"
+      ],
+      "interfaces": [
+        "lib/positions/harvest.ts: export async function harvest(deps: { client: MagicSeoClient; kv; projects: { id: number; domain: string; region: number; name: string }[]; today: string /* YYYY-MM-DD */; pauseMs?: number /* default 1000 between projects */ }): Promise<{ projects: number; checks: number }> — reads positions(id, { from, to: today }) where from = last harvested date of that project or today − 30 days, merges into KV keys partitioned by month 'pos:<projectId>:<YYYY-MM>' as { keyword: { date: { pc, mobile, url } } } and writes 'pos-meta:<projectId>' { lastDate }",
+        "lib/positions/report.ts: export type ReportRow = { site: string; city: string; keyword: string; date: string; pcPosition: number | null; mobilePosition: number | null; foundUrl: string }; export async function reportRows(kv, projects, filter: { domain: string; region?: number; keyword?: string; from: string; to: string }): Promise<ReportRow[]>; export function toCsv(rows: ReportRow[]): string",
+        "server/positions-handlers.ts (`import type` only from sdk): createPositionsHandlers(deps) returning { positions_report(filter), positions_csv(filter), positions_harvest_now() }; server/positions.ts: positionsRpc, positionsHandlers(ctx), registerPositions(ctx) harvesting through bb.background.schedule('positions', '*/10 * * * *', …) once config.positionsIntervalHours have passed since 'pos-meta:last-run'.; it imports lib modules by relative .ts paths so `node --test` runs it without npm install."
+      ],
+      "invariants": [
+        "Harvesting only reads (GET positions); it never calls startPositionsJob or any mutation.",
+        "MagicSEO position 101 is stored as 101 and shown in the UI as '100+'; CSV keeps 101.",
+        "CSV header is exactly `site,city,keyword,date,pc_position,mobile_position,found_url`, fields with comma, quote or newline are double-quoted with inner quotes doubled.",
+        "All user-visible strings come from i18n/reports.ts with `export const ru: Record<keyof typeof en, string>`; ui/reports-tab.css has no hex colours.",
+        "Follow the pattern and conventions of these files outside this repository (read them before writing): /Users/vechkasov/Documents/BB-сервис/docs/DESIGN.md.",
+        "Files under .bb/ and .agents/ are untracked: when a worktree lacks them, read them at /Users/vechkasov/Documents/BB-сервис/plugins/magicseo/<same path>.",
+        "BB plugin KV holds at most 256 KiB (262144 bytes) per key: every value this task writes stays below that size. Position history is split into one key per project and month."
+      ],
+      "out_of_scope": [
+        "Report recipients, e-mail/Telegram delivery and report format beyond the table and CSV (deferred)",
+        "Manual paid position checks (T3 has the button)"
+      ],
+      "depends_on": [
+        "T3"
+      ],
+      "acceptance": [
+        "`node --test tests/positions/harvest.test.ts` exits 0; with a fake client returning tests/fixtures/positions-sample.json (a trimmed copy of positions_527041_full_range.json) it asserts the first harvest requests from = today − 30 days, the second harvest requests from = the stored lastDate, checks dated in two months land in two keys 'pos:<id>:2026-06' and 'pos:<id>:2026-07', the merged value keeps checks of both runs, position 101 is stored as 101, the fake client receives 0 mutating calls, and a generated month of 100 keywords × 31 days serializes below 262144 characters.",
+        "`node --test tests/positions/report.test.ts` exits 0; reportRows filters by domain, region and keyword and date range, city comes from cityByRegion, and toCsv output starts with the line `site,city,keyword,date,pc_position,mobile_position,found_url` and quotes a keyword containing a comma.",
+        "`node --test tests/server/positions-handlers.test.ts` exits 0 (positions_csv returns the toCsv text for the filter; positions_harvest_now returns { projects, checks }), `npm install --no-audit --no-fund --silent && npm run build` exits 0 and `npx tsc --noEmit -p tsconfig.json` exits 0.",
+        "`grep -c 'Record<keyof typeof en, string>' i18n/reports.ts` prints 1."
+      ],
+      "verify": "tests",
+      "verification": [
+        {
+          "command": "node --test tests/positions/harvest.test.ts",
+          "cwd": "."
+        },
+        {
+          "command": "node --test tests/positions/report.test.ts",
+          "cwd": "."
+        },
+        {
+          "command": "node --test tests/server/positions-handlers.test.ts",
+          "cwd": "."
+        },
+        {
+          "command": "npm install --no-audit --no-fund --silent && npm run build",
+          "cwd": "."
+        },
+        {
+          "command": "npx tsc --noEmit -p tsconfig.json",
+          "cwd": "."
+        },
+        {
+          "command": "grep -c 'Record<keyof typeof en, string>' i18n/reports.ts",
+          "cwd": "."
+        }
+      ],
+      "qa_cases": [
+        "[UI-observable] QA-W3-2: Open the MagicSEO app, tab Reports, pick site proart-show.ru, press Harvest now, then Export CSV. Expect: The table shows keyword rows with dates as columns and positions, 101 shown as '100+'; a city filter lists the site's cities; Export CSV downloads a file whose first line is site,city,keyword,date,pc_position,mobile_position,found_url; in Russian BB the tab is «Отчёты»."
+      ]
+    }
+  ],
+  "waves": [
+    [
+      "T1",
+      "T2"
+    ],
+    [
+      "T3",
+      "T4"
+    ],
+    [
+      "T5",
+      "T6"
+    ]
+  ]
+}

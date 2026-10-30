@@ -1,0 +1,24 @@
+{
+ "available_static_columns": [
+  {
+   "key": "<str>",
+   "title": "<title>"
+  },
+  {
+   "key": "<str>",
+   "title": "<title>"
+  },
+  {
+   "key": "<str>",
+   "title": "<title>"
+  }
+ ],
+ "disabled_static_columns": [
+  "<str>",
+  "<str>",
+  "<str>"
+ ],
+ "disabled_dynamic_columns": {
+  "527052": []
+ }
+}

@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "gaps_addressed": [
+    "T1",
+    "T3",
+    "T4",
+    "T6",
+    "T7"
+  ],
+  "root_cause": "absolute external read_first paths",
+  "snapshots": 11,
+  "project_relative_read_first": true,
+  "snapshot_hashes_and_source_equality": true,
+  "ownership_and_earlier_wave_dependencies": true,
+  "coverage": [
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5",
+    "D6",
+    "D7",
+    "D8"
+  ],
+  "base_checks": {
+    "count": 7,
+    "exit_code": 1,
+    "reason": "owned implementation absent"
+  }
+}

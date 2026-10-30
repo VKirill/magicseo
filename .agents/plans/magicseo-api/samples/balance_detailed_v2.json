@@ -1,0 +1,135 @@
+{
+ "balance": {
+  "current_balance": 0,
+  "projects_balance_sum": 0,
+  "average_daily_clicks_spend": 0,
+  "average_daily_money_spend": 0,
+  "average_daily_positions_money_spend": 0,
+  "monthly_clicks_forecast": 0,
+  "monthly_money_forecast": 0,
+  "days_remaining": 0,
+  "forecast_state": "insufficient_data",
+  "money_balance": 11972100,
+  "billing_type": "money",
+  "monthly_budget_kopecks": 0,
+  "daily_budget_kopecks": 0,
+  "projects_money_balance_sum": 0,
+  "click_price": 100,
+  "approx_clicks": 119721
+ },
+ "tariffs": {
+  "has_first_payment": true,
+  "use_personal_tariffs": true,
+  "use_money_in_personal_tariffs": true,
+  "comment": "<str>",
+  "user_info": {
+   "inn": 0,
+   "ogr_name": "<str>",
+   "contract_num": "<str>",
+   "crypto_payment_available": false
+  },
+  "personal_clicks_tariffs": {
+   "tariffs": [
+    {
+     "id": 380,
+     "name": "<name>",
+     "is_default": false,
+     "task_cost": 200,
+     "money_amount": 0,
+     "is_personal": true,
+     "month_spent_amount": 1000,
+     "personal_use_money": false
+    }
+   ],
+   "prev_month_spent": 22421,
+   "current_month_spent": 1817,
+   "current_month_next_threshold": 0,
+   "current_month_click_price": 200,
+   "next_month_click_price": 200,
+   "next_month_next_click_price": 0,
+   "tariff_found": true
+  },
+  "personal_money_tariffs": {
+   "tariffs": [
+    {
+     "id": 406,
+     "name": "<name>",
+     "is_default": false,
+     "task_cost": 200,
+     "money_amount": 0,
+     "is_personal": true,
+     "month_spent_amount": 6000000,
+     "personal_use_money": true
+    },
+    {
+     "id": 739,
+     "name": "<name>",
+     "is_default": false,
+     "task_cost": 180,
+     "money_amount": 0,
+     "is_personal": true,
+     "month_spent_amount": 8000000,
+     "personal_use_money": true
+    },
+    {
+     "id": 407,
+     "name": "<name>",
+     "is_default": false,
+     "task_cost": 170,
+     "money_amount": 0,
+     "is_personal": true,
+     "month_spent_amount": 10000000,
+     "personal_use_money": true
+    }
+   ],
+   "prev_month_spent": 2234700,
+   "current_month_spent": 181700,
+   "current_month_next_threshold": 0,
+   "current_month_click_price": 300,
+   "next_month_click_price": 0,
+   "next_month_next_click_price": 0,
+   "tariff_found": false
+  },
+  "common_money_tariffs": {
+   "tariffs": [
+    {
+     "id": 439,
+     "name": "<name>",
+     "is_default": true,
+     "task_cost": 300,
+     "money_amount": 0,
+     "is_personal": false,
+     "month_spent_amount": 0,
+     "personal_use_money": false
+    },
+    {
+     "id": 440,
+     "name": "<name>",
+     "is_default": false,
+     "task_cost": 280,
+     "money_amount": 0,
+     "is_personal": false,
+     "month_spent_amount": 1500000,
+     "personal_use_money": false
+    },
+    {
+     "id": 441,
+     "name": "<name>",
+     "is_default": false,
+     "task_cost": 240,
+     "money_amount": 0,
+     "is_personal": false,
+     "month_spent_amount": 5000000,
+     "personal_use_money": false
+    }
+   ],
+   "prev_month_spent": 2234700,
+   "current_month_spent": 181700,
+   "current_month_next_threshold": 1500000,
+   "current_month_click_price": 280,
+   "next_month_click_price": 300,
+   "next_month_next_click_price": 280,
+   "tariff_found": true
+  }
+ }
+}

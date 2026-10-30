@@ -1,0 +1,17 @@
+{
+ "error": "",
+ "error_raw": "<str>",
+ "result": {
+  "id": 220797473,
+  "started_at": "2026-10-30T09:36:31.021532+03:00",
+  "user_id": 0,
+  "project_id": 544055,
+  "status": 1,
+  "error": "",
+  "provider": "yaxml_demo",
+  "manual_launch": false,
+  "raw_error": "<str>",
+  "device": 2
+ },
+ "total": 0
+}

@@ -1,0 +1,72 @@
+{
+  "source_root": "BB-сервис",
+  "purpose": "Read-only source and design pattern snapshots for portable task read_first paths",
+  "files": [
+    {
+      "path": ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-repo-pulse/package.json.txt",
+      "source": "plugins/bb-plugin-repo-pulse/package.json",
+      "sha256": "f8d9907dc355aac2c9e7549663a6104c00a352c137a80c462f3e41ac712d5794",
+      "bytes": 1895
+    },
+    {
+      "path": ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-repo-pulse/tsconfig.json.txt",
+      "source": "plugins/bb-plugin-repo-pulse/tsconfig.json",
+      "sha256": "c861225bba5cb37b47cb799bbea76c33708b1eb73a78f79b6a002ea2a4d4adcd",
+      "bytes": 385
+    },
+    {
+      "path": ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-repo-pulse/server.ts.txt",
+      "source": "plugins/bb-plugin-repo-pulse/server.ts",
+      "sha256": "ae0940c3c6f8e81e2ace4ca5bebb6bf1ea7a0a0728cd135f4b8754dfb4487df0",
+      "bytes": 39812
+    },
+    {
+      "path": ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-env-catalog/server.ts.txt",
+      "source": "plugins/bb-plugin-env-catalog/server.ts",
+      "sha256": "8ec64ea51c397036bd1f88e6723421eeb5b753bd2fe9ab04841155cdd594a5aa",
+      "bytes": 46589
+    },
+    {
+      "path": ".agents/phases/ph_f16b2b8b06/references/docs/DESIGN.md.txt",
+      "source": "docs/DESIGN.md",
+      "sha256": "b0a699551e1eb58a0c7460632c7026caaf63187cb08b939563f96f55c2ee2be0",
+      "bytes": 23877
+    },
+    {
+      "path": ".agents/phases/ph_f16b2b8b06/references/docs/design/pokecut-plugin.css.txt",
+      "source": "docs/design/pokecut-plugin.css",
+      "sha256": "99808f3ccfbc85b1a3240b8fdcecea352261f62a3adbcf3f9b9a026399674ad3",
+      "bytes": 6804
+    },
+    {
+      "path": ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-repo-pulse/app.tsx.txt",
+      "source": "plugins/bb-plugin-repo-pulse/app.tsx",
+      "sha256": "a25a59de3693b0f33e61f48a3df63f82695986bfb2a01bf5ea74d0aec72a6470",
+      "bytes": 25824
+    },
+    {
+      "path": ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-repo-pulse/i18n.ts.txt",
+      "source": "plugins/bb-plugin-repo-pulse/i18n.ts",
+      "sha256": "c39ec00dcf846be800c5d1fe06ee83c23ea6eddca4b3941ba2dd88cf8e58211a",
+      "bytes": 5478
+    },
+    {
+      "path": ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-repo-pulse/components.json.txt",
+      "source": "plugins/bb-plugin-repo-pulse/components.json",
+      "sha256": "dbad7e03721ca557cf53a650df091703dbe46729eff6def8747d112663581184",
+      "bytes": 494
+    },
+    {
+      "path": ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-repo-pulse/components/ui/button.tsx.txt",
+      "source": "plugins/bb-plugin-repo-pulse/components/ui/button.tsx",
+      "sha256": "d0d2a75b3a22d2447cc8641ba74e97a2a1e21f31ebdba00443fe74f9a5c2851b",
+      "bytes": 2217
+    },
+    {
+      "path": ".agents/phases/ph_f16b2b8b06/references/plugins/bb-plugin-repo-pulse/tests/app.test.tsx.txt",
+      "source": "plugins/bb-plugin-repo-pulse/tests/app.test.tsx",
+      "sha256": "18f06ae378f33be2fad08b90a1fae34f4fd8f3d33eb9d19c189a518db49029db",
+      "bytes": 8998
+    }
+  ]
+}
