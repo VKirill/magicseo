@@ -24,6 +24,8 @@ import type {
 
 const DEFAULT_BASE = 'https://lk.magicseo.ru';
 const REUSE_SKEW_MS = 60_000;
+const CATALOG_PAGE_SIZE = 100;
+const CATALOG_MAX_PAGES = 20;
 
 export class MagicSeoError extends Error {
   status: number;
@@ -88,6 +90,41 @@ function queryString(query: Record<string, string | number | undefined> | undefi
   return s ? `?${s}` : '';
 }
 
+function asCatalogPage(data: unknown): { items: CatalogItem[]; total: number } {
+  if (Array.isArray(data)) return { items: data as CatalogItem[], total: data.length };
+  if (data && typeof data === 'object' && Array.isArray((data as { items?: unknown }).items)) {
+    const page = data as { items: CatalogItem[]; total?: unknown };
+    return { items: page.items, total: typeof page.total === 'number' ? page.total : page.items.length };
+  }
+  return { items: [], total: 0 };
+}
+
+function collectProjectIds(items: CatalogItem[], ids: Set<number>): void {
+  const walk = (item: CatalogItem): void => {
+    if (item.project_info) ids.add(item.project_info.id);
+    for (const child of item.children ?? []) walk(child);
+  };
+  for (const item of items) walk(item);
+}
+
+function mergeCatalogPage(base: CatalogItem[], extra: CatalogItem[], seen: Set<number>): void {
+  for (const item of extra) {
+    if (item.project_info) {
+      if (seen.has(item.project_info.id)) continue;
+      seen.add(item.project_info.id);
+      base.push(item);
+      continue;
+    }
+    const target = base.find((b) => b.id === item.id && b.type === item.type);
+    if (target) {
+      target.children ??= [];
+      mergeCatalogPage(target.children, item.children ?? [], seen);
+    } else {
+      base.push(item);
+    }
+  }
+}
+
 export class MagicSeoClient {
   #credentials: () => Promise<Credentials>;
   #fetch: typeof fetch;
@@ -113,7 +150,24 @@ export class MagicSeoClient {
   }
 
   async catalogItems(): Promise<{ items: CatalogItem[] } | CatalogItem[]> {
-    return (await this.#request('GET', '/backend/catalog_items')) as { items: CatalogItem[] } | CatalogItem[];
+    const seen = new Set<number>();
+    const first = asCatalogPage(
+      await this.#request('GET', '/backend/catalog_items', { query: { offset: 0, limit: CATALOG_PAGE_SIZE } }),
+    );
+    collectProjectIds(first.items, seen);
+    let page = 1;
+    while (seen.size < first.total && page < CATALOG_MAX_PAGES) {
+      const next = asCatalogPage(
+        await this.#request('GET', '/backend/catalog_items', {
+          query: { offset: page * CATALOG_PAGE_SIZE, limit: CATALOG_PAGE_SIZE },
+        }),
+      );
+      mergeCatalogPage(first.items, next.items, seen);
+      collectProjectIds(next.items, seen);
+      page++;
+    }
+    const result: { items: CatalogItem[]; total: number } = { items: first.items, total: first.total };
+    return result;
   }
 
   async getProject(id: number, range?: DateRange): Promise<Project> {

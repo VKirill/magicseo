@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { MagicSeoClient, MagicSeoError } from '../../lib/magicseo/client.ts';
-import type { MutationEntry } from '../../lib/magicseo/types.ts';
+import type { CatalogItem, CatalogProjectInfo, MutationEntry } from '../../lib/magicseo/types.ts';
 
 const PASSWORD = 'fake-secret-marker';
 const USERNAME = 'fake@example.invalid';
@@ -59,7 +59,13 @@ const READS: Array<{
   urlIncludes?: string;
 }> = [
   { name: 'listProjects', call: (c) => c.listProjects(), method: 'GET', path: '/backend/projects/list' },
-  { name: 'catalogItems', call: (c) => c.catalogItems(), method: 'GET', path: '/backend/catalog_items' },
+  {
+    name: 'catalogItems',
+    call: (c) => c.catalogItems(),
+    method: 'GET',
+    path: '/backend/catalog_items',
+    urlIncludes: 'offset=0&limit=100',
+  },
   { name: 'getProject', call: (c) => c.getProject(5), method: 'GET', path: '/backend/project/5' },
   { name: 'getAutolaunch', call: (c) => c.getAutolaunch(5), method: 'GET', path: '/backend/project/5/autolaunch' },
   {
@@ -98,6 +104,7 @@ const MUTATIONS: Array<{
   call: (c: MagicSeoClient) => Promise<unknown>;
   method: string;
   path: string;
+  urlIncludes?: string;
 }> = [
   {
     name: 'createProject',
@@ -186,6 +193,9 @@ test('every read and mutation uses the documented method, path, and Bearer token
     assert.equal(last.headers.get('authorization'), `Bearer ${token}`, row.name);
     if (row.name === 'positions') {
       assert.equal(new URL(last.url).searchParams.get('checks_mode'), 'one_per_day');
+    }
+    if (row.urlIncludes) {
+      assert.ok(last.url.includes(row.urlIncludes), `${row.name}: ${last.url}`);
     }
     if (row.name === 'stopJob') {
       assert.equal(last.url, `${BASE}/backend/project/5/job`);
@@ -355,4 +365,67 @@ test('client has no payment, transfer, separate_balance, project-delete or admin
     assert.equal(/payment|transfer|separate_balance|admin/i.test(n), false, n);
   }
   assert.equal(names.includes('deleteProject'), false);
+});
+
+test('catalogItems pages with offset/limit until every project is collected', async () => {
+  const token = makeToken(3600);
+  const calls: string[] = [];
+  const mutations: MutationEntry[] = [];
+  const project = (id: number): CatalogItem => ({
+    id: 1000 + id,
+    parent_id: 1,
+    type: 'project',
+    name: `project-${id}`,
+    children_count: 0,
+    project_info: { id, user_id: 1, name: `project-${id}`, domain: 'museshow.ru' } as CatalogProjectInfo,
+  });
+  const client = new MagicSeoClient({
+    credentials: async () => ({ username: USERNAME, password: PASSWORD }),
+    onMutation: (e) => {
+      mutations.push(e);
+    },
+    fetch: async (url, init = {}) => {
+      const u = new URL(String(url));
+      if (u.pathname === '/backend/login') return envelope({ token });
+      calls.push(u.pathname + u.search);
+      assert.equal(init.method ?? 'GET', 'GET');
+      assert.equal(u.pathname, '/backend/catalog_items');
+      const offset = Number(u.searchParams.get('offset'));
+      const limit = Number(u.searchParams.get('limit'));
+      assert.equal(limit, 100);
+      const ids = Array.from({ length: 130 }, (_, i) => i).slice(offset, offset + limit);
+      return envelope({
+        items: [
+          {
+            id: 1,
+            parent_id: null,
+            type: 'folder',
+            name: 'root',
+            children_count: 130,
+            children: ids.map(project),
+          },
+        ],
+        total: 130,
+      });
+    },
+  });
+
+  const res = await client.catalogItems();
+  assert.deepEqual(calls, [
+    '/backend/catalog_items?offset=0&limit=100',
+    '/backend/catalog_items?offset=100&limit=100',
+  ]);
+  const catalog = res as { items: CatalogItem[]; total: number };
+  assert.equal(catalog.total, 130);
+  assert.equal(catalog.items.length, 1);
+  const children = catalog.items[0].children ?? [];
+  assert.equal(children.length, 130);
+  const seen = new Set<number>();
+  for (const child of children) {
+    assert.ok(child.project_info);
+    assert.equal(seen.has(child.project_info.id), false, `duplicate project ${child.project_info.id}`);
+    seen.add(child.project_info.id);
+  }
+  assert.equal(seen.size, 130);
+  assert.equal(mutations.length, 0);
 });
