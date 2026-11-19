@@ -1,91 +1,90 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { fetchConcerts } from '../../lib/concerts/wordpress.ts';
-import fixture from '../fixtures/atmosphere-concerts-page.json' with { type: 'json' };
+import restFixture from '../fixtures/atmosphere-concerts-page.json' with { type: 'json' };
+const baseUrl = 'https://atmosphere-show.ru';
+const postType = 'concerts';
 
-type Call = { url: string; init: RequestInit | undefined };
-
-function fakeFetch(pages: unknown[][]): { calls: Call[]; fetch: typeof fetch } {
-  const calls: Call[] = [];
-  const f = (async (input: unknown, init?: RequestInit) => {
-    const url = String(input);
-    calls.push({ url, init });
-    const page = Number(new URL(url).searchParams.get('page'));
-    const body = pages[page - 1];
-    if (body === undefined) return new Response('not found', { status: 404 });
-    return new Response(JSON.stringify(body), {
-      status: 200,
-      headers: { 'content-type': 'application/json', 'x-wp-totalpages': String(pages.length) },
-    });
-  }) as typeof fetch;
-  return { calls, fetch: f };
-}
-
-const PATHS = [
-  '/wp-json/wp/v2/concerts?per_page=100&page=1',
-  '/wp-json/wp/v2/concerts?per_page=100&page=2',
-];
-
-test('fetchConcerts follows X-WP-TotalPages with GET requests and maps meta fields', async () => {
-  const { calls, fetch: fake } = fakeFetch([fixture.slice(0, 2), fixture.slice(2)]);
+test('fetchConcerts reads one static snapshot and maps its flat concert fields', async () => {
+  const calls: string[] = [];
+  const show = {
+    id: 10,
+    status: 'publish',
+    gorod: 'Тула',
+    v_gorode: 'в Туле',
+    data_kontserta: '2026-12-18',
+    vremia_kontserta: '21:00',
+    sold_out: 'true',
+  };
+  const fake: typeof fetch = async (url, init) => {
+    calls.push(String(url));
+    assert.equal(init?.method, 'GET');
+    assert.equal(init?.redirect, 'error');
+    assert.equal(new Headers(init?.headers).get('authorization'), null);
+    return Response.json([show, { id: 11, status: 'draft' }]);
+  };
   const concerts = await fetchConcerts({
-    baseUrl: 'https://atmosphere-show.ru',
-    postType: 'concerts',
+    baseUrl: baseUrl + '/',
+    postType,
     fetch: fake,
   });
+  assert.deepEqual(calls, ['https://atmosphere-show.ru/concerts.json']);
+  assert.deepEqual(concerts[0], {
+    id: 10,
+    status: 'publish',
+    link: 'https://atmosphere-show.ru/?post_type=concerts&p=10',
+    city: 'Тула',
+    cityIn: 'в Туле',
+    date: '2026-12-18',
+    time: '21:00',
+    soldOut: true,
+    postponedTo: null,
+    modifiedGmt: '',
+  });
+  assert.equal(concerts[1].status, 'draft');
+  assert.equal(concerts[1].link, '');
+});
 
-  assert.equal(concerts.length, fixture.length);
-  assert.deepEqual(calls.map((c) => new URL(c.url).pathname + new URL(c.url).search), PATHS);
-  for (const c of calls) {
-    assert.equal(c.init?.method ?? 'GET', 'GET');
-    assert.equal(new Headers(c.init?.headers).get('authorization'), null);
-  }
-
-  for (let i = 0; i < fixture.length; i++) {
-    const src = fixture[i];
-    const got = concerts[i];
-    assert.equal(got.id, src.id);
-    assert.equal(got.status, src.status);
-    assert.equal(got.link, src.link);
-    assert.equal(got.city, src.meta.gorod);
-    assert.equal(got.cityIn, src.meta.v_gorode);
-    assert.equal(got.date, src.meta.data_kontserta);
-    assert.equal(got.time, src.meta.vremia_kontserta);
-    assert.equal(got.soldOut, false);
-    assert.equal(got.postponedTo, null);
-    assert.equal(got.modifiedGmt, src.modified_gmt);
+test('fetchConcerts fails on a malformed or empty snapshot', async () => {
+  for (const data of [{}, [], [null], [{ id: 1 }]]) {
+    const fake: typeof fetch = async () => Response.json(data);
+    await assert.rejects(fetchConcerts({ baseUrl, postType, fetch: fake }));
   }
 });
 
-test('fetchConcerts maps soldOut and postponedTo when meta carries them', async () => {
-  const sold = JSON.parse(JSON.stringify(fixture[0]));
-  sold.meta.sold_out = 'true';
-  sold.meta.perenos_kontserta = 'https://atmosphere-show.ru/concerts/moved-01-02/';
-  const { fetch: fake } = fakeFetch([[sold]]);
-  const [c] = await fetchConcerts({ baseUrl: 'https://x.ru/', postType: 'concerts', fetch: fake });
-  assert.equal(c.soldOut, true);
-  assert.equal(c.postponedTo, 'https://atmosphere-show.ru/concerts/moved-01-02/');
+test('fetchConcerts reports an unavailable snapshot without a second request', async () => {
+  const calls: string[] = [];
+  const fake: typeof fetch = async (url) => {
+    calls.push(String(url));
+    return new Response('oops', { status: 500 });
+  };
+  await assert.rejects(fetchConcerts({ baseUrl, postType, fetch: fake }), /HTTP 500/);
+  assert.deepEqual(calls, ['https://atmosphere-show.ru/concerts.json']);
 });
 
-test('Authorization header is sent only when basicAuth is passed', async () => {
-  const noAuth = fakeFetch([fixture]);
-  await fetchConcerts({ baseUrl: 'https://x.ru', postType: 'concerts', fetch: noAuth.fetch });
-  assert.equal(new Headers(noAuth.calls[0].init?.headers).get('authorization'), null);
+test('a different WordPress site keeps its paginated REST reader', async () => {
+  const calls: string[] = [];
+  const fake: typeof fetch = async (url, init) => {
+    const request = new URL(String(url));
+    calls.push(request.pathname + request.search);
+    assert.equal(new Headers(init?.headers).get('authorization'), 'Basic dXNlcjpwYXNz');
+    const page = Number(request.searchParams.get('page'));
+    const posts = page === 1 ? restFixture.slice(0, 2) : restFixture.slice(2);
+    return Response.json(posts, { headers: { 'x-wp-totalpages': '2' } });
+  };
 
-  const withAuth = fakeFetch([fixture]);
-  await fetchConcerts({
-    baseUrl: 'https://x.ru',
-    postType: 'concerts',
-    fetch: withAuth.fetch,
+  const concerts = await fetchConcerts({
+    baseUrl: 'https://other.example',
+    postType,
+    fetch: fake,
     basicAuth: { username: 'user', password: 'pass' },
   });
-  assert.equal(
-    new Headers(withAuth.calls[0].init?.headers).get('authorization'),
-    'Basic ' + Buffer.from('user:pass').toString('base64'),
-  );
-});
 
-test('fetchConcerts throws on non-2xx', async () => {
-  const fake = (async () => new Response('oops', { status: 500 })) as typeof fetch;
-  await assert.rejects(fetchConcerts({ baseUrl: 'https://x.ru', postType: 'concerts', fetch: fake }));
+  assert.deepEqual(calls, [
+    '/wp-json/wp/v2/concerts?per_page=100&page=1',
+    '/wp-json/wp/v2/concerts?per_page=100&page=2',
+  ]);
+  assert.equal(concerts.length, restFixture.length);
+  assert.equal(concerts[0].link, restFixture[0].link);
+  assert.equal(concerts[0].city, restFixture[0].meta.gorod);
 });
